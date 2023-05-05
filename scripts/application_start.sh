@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /var/www/html/pi-iii-frontend
+cd /var/www/html/frontend-pi-iii
 
 # Install the project dependencies
 npm install
