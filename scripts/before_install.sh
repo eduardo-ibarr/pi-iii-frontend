@@ -1,8 +1,19 @@
 #!/bin/bash
 
-# Install the system dependencies required for the HTTPD server
-sudo yum update -y
-sudo yum install -y httpd
+# Start Apache web server if not already running
+if ! systemctl status httpd | grep active; then
+    echo "Starting Apache web server"
+    systemctl start httpd
+fi
 
-# Start the HTTPD server
-sudo service httpd start
+# Remove existing project directory
+if [ -d /var/www/html/frontend-pi-iii ]; then
+    echo "Removing existing project directory"
+    rm -rf /var/www/html/frontend-pi-iii
+fi
+
+# Create project directory
+echo "Creating project directory"
+mkdir -p /var/www/html/frontend-pi-iii
+
+exit 0
