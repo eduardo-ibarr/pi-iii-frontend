@@ -1,0 +1,22 @@
+{
+	"Access denied by CORS.": "Acesso negado pelo CORS.",
+	"Header x-access-token is required.": "Cabeçalho x-access-token é necessário.",
+	"Access unauthorized.": "Acesso não autorizado.",
+	"Email already in use.": "E-mail já em uso.",
+	"Agent not found.": "Agente não encontrado.",
+	"The agent informed does not exists.": "O agente informado não existe.",
+	"The ticket informed does not exists.": "O ticket informado não existe.",
+	"Agent-Ticket history not found.": "Histórico de agente-ticket não encontrado.",
+	"Incorrect email or password.": "E-mail ou senha incorretos.",
+	"No refresh token provided.": "Nenhum token de atualização fornecido.",
+	"Invalid email or password.": "E-mail ou senha inválidos.",
+	"There are another category with this name.": "Já existe outra categoria com esse nome.",
+	"Category not found.": "Categoria não encontrada.",
+	"Conversation not found.": "Conversa não encontrada.",
+	"The conversation informed does not exists.": "A conversa informada não existe.",
+	"Message not found.": "Mensagem não encontrada.",
+	"Requester not found.": "Requerente não encontrado.",
+	"Already exists a sector with this name.": "Já existe um setor com esse nome.",
+	"Sector not found.": "Setor não encontrado.",
+	"Ticket not found.": "Ticket não encontrado."
+}
