@@ -1,22 +1,20 @@
 import React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import { LoginPage } from './pages/Login';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { PublicRoutes } from './routes/public';
+import { PrivateRoutes } from './routes/private';
+import { ContextsProvider } from './contexts/provider';
 
-const { NODE_ENV } = process.env;
-
-const queryClient = new QueryClient();
-
-function App() {
+const App = () => {
 	return (
-		<QueryClientProvider client={queryClient}>
-			<h1>sistema em desenvolvimento...</h1>
-			<LoginPage />
-			{NODE_ENV === 'development' && (
-				<ReactQueryDevtools initialIsOpen={false} />
-			)}
-		</QueryClientProvider>
+		<ContextsProvider>
+			<Router>
+				<Routes>
+					<Route path="*" element={<PublicRoutes />} />
+					<Route path="/app/*" element={<PrivateRoutes />} />
+				</Routes>
+			</Router>
+		</ContextsProvider>
 	);
-}
+};
 
 export default App;

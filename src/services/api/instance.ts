@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { getAccessToken } from '../../helpers/auth';
 
-const { NODE_ENV, LOCAL_API_URL, PRD_API_URL } = process.env;
-
-console.log({ NODE_ENV, LOCAL_API_URL, PRD_API_URL });
+const { REACT_APP_API_URL } = process.env;
 
 const instance = axios.create({
-	baseURL: NODE_ENV === 'development' ? LOCAL_API_URL : PRD_API_URL,
+	baseURL: REACT_APP_API_URL,
 });
 
 instance.interceptors.request.use((config) => {
