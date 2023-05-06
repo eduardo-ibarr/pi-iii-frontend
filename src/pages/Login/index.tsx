@@ -1,5 +1,4 @@
 import { Form, Radio, Input, Button, Spin } from 'antd';
-import form from 'antd/es/form';
 import React from 'react';
 import { ILogin } from '../../interfaces/modules';
 import { useLogin } from '../../hooks/api/auth/useLogin';
