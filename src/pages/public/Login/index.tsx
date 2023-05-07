@@ -96,9 +96,9 @@ export const LoginPage = () => {
 
 			{isSuccess ? (
 				typeOfUser === 'agent' ? (
-					<Navigate to="/app/agentes/novo" />
+					<Navigate to="/app/agentes" />
 				) : typeOfUser === 'requester' ? (
-					<Navigate to="/app/requisitantes/novo" />
+					<Navigate to="/app/requisitantes" />
 				) : (
 					<></>
 				)
