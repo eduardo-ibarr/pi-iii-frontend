@@ -1,16 +1,11 @@
 import { Layout, Menu, Breadcrumb, theme } from 'antd';
 import React, { useState } from 'react';
 
-import {
-	DesktopOutlined,
-	FileOutlined,
-	PieChartOutlined,
-	TeamOutlined,
-	UserOutlined,
-} from '@ant-design/icons';
+import { DesktopOutlined, FileOutlined, UserOutlined } from '@ant-design/icons';
 
 import type { MenuProps } from 'antd';
 import { ParentPage } from '../../../interfaces/parentPage';
+import { useNavigate } from 'react-router';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -31,22 +26,21 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-	getItem('Option 1', '1', <PieChartOutlined />),
-	getItem('Option 2', '2', <DesktopOutlined />),
-	getItem('User', 'sub1', <UserOutlined />, [
-		getItem('Tom', '3'),
-		getItem('Bill', '4'),
-		getItem('Alex', '5'),
-	]),
-	getItem('Team', 'sub2', <TeamOutlined />, [
-		getItem('Team 1', '6'),
-		getItem('Team 2', '8'),
-	]),
-	getItem('Files', '9', <FileOutlined />),
+	getItem('Agentes', '1', <UserOutlined />),
+	getItem('Setores', '2', <DesktopOutlined />),
+	// getItem('User', 'sub1', <UserOutlined />, [
+	// 	getItem('Tom', '3'),
+	// 	getItem('Bill', '4'),
+	// 	getItem('Alex', '5'),
+	// ]),
+	getItem('Requisitantes', '3', <UserOutlined />),
+	getItem('Categorias', '4', <FileOutlined />),
+	getItem('Tickets', '5', <FileOutlined />),
 ];
 
 export const PrivateBase = ({ children }: ParentPage) => {
 	const [collapsed, setCollapsed] = useState(false);
+	const history = useNavigate();
 
 	const {
 		token: { colorBgContainer },
@@ -55,6 +49,14 @@ export const PrivateBase = ({ children }: ParentPage) => {
 	const breadcrumbItems = window.location.pathname
 		.split('/')
 		.filter((item) => item !== 'app');
+
+	const handleNavigate = (event: any) => {
+		history(
+			`/app/${(
+				items.find((i) => i?.key === event.key) as MenuItem & { label: string }
+			)?.label.toLowerCase()}`
+		);
+	};
 
 	return (
 		<Layout style={{ minHeight: '100vh' }}>
@@ -75,6 +77,7 @@ export const PrivateBase = ({ children }: ParentPage) => {
 					defaultSelectedKeys={['1']}
 					mode="inline"
 					items={items}
+					onClick={handleNavigate}
 				/>
 			</Sider>
 			<Layout className="site-layout">
