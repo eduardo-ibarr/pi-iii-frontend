@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { ParentPage } from '../interfaces/parentPage';
+import { getAccessToken } from '../helpers/auth';
 
 interface IAppContext {
 	isLoggedIn: boolean;
@@ -13,7 +14,7 @@ const AppContext = createContext<IAppContext>({} as IAppContext);
 export default AppContext;
 
 export const AppProvider = ({ children }: ParentPage) => {
-	const [isLoggedIn, setLoggedIn] = useState(false);
+	const [isLoggedIn, setLoggedIn] = useState(!!getAccessToken());
 	const [typeOfUser, setTypeOfUser] = useState('');
 
 	return (
