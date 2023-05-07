@@ -9,5 +9,5 @@ export const login = async (values: ILogin): Promise<IAuth> => {
 };
 
 export const logoff = async (): Promise<void> => {
-	await client.get('/api/logoff');
+	await client.post('/api/logoff');
 };

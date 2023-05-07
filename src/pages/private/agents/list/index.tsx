@@ -7,6 +7,8 @@ import { IAgent } from '../../../../interfaces/modules';
 import { useNavigate } from 'react-router';
 import { LoadingSpin } from '../../../../components/LoadingSpin';
 import Typography from 'antd/es/typography/Typography';
+import { useDeleteAgent } from '../../../../hooks/api/agents/useDeleteAgent';
+import { handleError } from '../../../../helpers/handleError';
 
 interface DataType {
 	key: React.Key;
@@ -17,11 +19,13 @@ interface DataType {
 }
 
 export const ListAgents = () => {
-	const { data: agents, isLoading } = useListAgents();
 	const history = useNavigate();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [idAgentToDelete, setIdAgentToDelete] = useState('');
+
+	const { data: agents, isLoading: isLoadingList } = useListAgents();
+	const { mutateAsync: deleteAgent } = useDeleteAgent();
 
 	const handleShowMoreInfo = (id: string) => {
 		history(`/app/agentes/${id}`);
@@ -76,7 +80,7 @@ export const ListAgents = () => {
 		},
 	];
 
-	if (isLoading) {
+	if (isLoadingList) {
 		return <LoadingSpin />;
 	}
 
@@ -103,8 +107,13 @@ export const ListAgents = () => {
 		moreInfo: agent.id,
 	}));
 
-	const handleOk = () => {
-		console.log(idAgentToDelete);
+	const handleOk = async () => {
+		try {
+			await deleteAgent(idAgentToDelete);
+		} catch (error) {
+			handleError(error);
+		}
+
 		setIsModalOpen(false);
 	};
 

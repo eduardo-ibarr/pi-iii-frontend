@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { LoginPage } from '../../pages/public/Login';
-import { PublicBase } from '../../pages/public/Base';
+import { LoginPage } from '../../pages/public/login';
+import { PublicBase } from '../../pages/public/base';
 
 export const PublicRoutes = () => {
 	return (
