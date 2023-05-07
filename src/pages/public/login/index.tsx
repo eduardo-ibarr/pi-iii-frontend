@@ -2,39 +2,46 @@ import { Form, Radio, Input, Button, Spin, Card } from 'antd';
 import React from 'react';
 import { ILogin } from '../../../interfaces/modules';
 import { useLogin } from '../../../hooks/api/auth/useLogin';
-import { IRequestError } from '../../../interfaces/requestError';
-import { AxiosError } from 'axios';
 import useAppContext from '../../../hooks/app/useAppContext';
-import { translateErrorMessage } from '../../../helpers/translateErrorMessage';
 import { Navigate } from 'react-router';
-import {
-	openErrorNotification,
-	openSuccessNotification,
-} from '../../../components';
+import { openSuccessNotification } from '../../../components';
 import Title from 'antd/es/typography/Title';
+import { useTurnAvailability } from '../../../hooks/api/agents/useTurnAvailability';
+import { handleError } from '../../../helpers/handleError';
 
 export const LoginPage = () => {
 	const [form] = Form.useForm<ILogin>();
 
-	const { handleLogin, handleSetTypeOfUser, typeOfUser } = useAppContext();
+	const { handleLogin, handleSetTypeOfUser, typeOfUser, handleSetUserEmail } =
+		useAppContext();
 
-	const { mutateAsync: login, isLoading, isSuccess } = useLogin();
+	const {
+		mutateAsync: turnAvailability,
+		isLoading: isLoadingUpdate,
+		isSuccess: isSuccessUpdate,
+	} = useTurnAvailability();
+
+	const {
+		mutateAsync: login,
+		isLoading: isLoadingLogin,
+		isSuccess: isSuccessLogin,
+	} = useLogin();
 
 	const onFinish = async ({ email, password, type_of_user }: ILogin) => {
 		console.log({ email, password, type_of_user });
 
 		try {
 			await login({ email, password, type_of_user });
+			await turnAvailability({ email, available: true });
 
 			handleLogin();
+
 			handleSetTypeOfUser(type_of_user);
+			handleSetUserEmail(email);
+
 			openSuccessNotification('Login realizado com sucesso.');
 		} catch (error) {
-			if (error instanceof AxiosError) {
-				const errorObj: IRequestError = error?.response?.data;
-				openErrorNotification(translateErrorMessage(errorObj.message));
-				console.log(errorObj);
-			}
+			handleError(error);
 		}
 	};
 
@@ -88,13 +95,17 @@ export const LoginPage = () => {
 							type="default"
 							htmlType="submit"
 						>
-							{isLoading ? <Spin style={{ color: 'white' }} /> : 'Login'}
+							{isLoadingLogin || isLoadingUpdate ? (
+								<Spin style={{ color: 'white' }} />
+							) : (
+								'Login'
+							)}
 						</Button>
 					</Form.Item>
 				</Form>
 			</Card>
 
-			{isSuccess ? (
+			{isSuccessLogin && isSuccessUpdate ? (
 				typeOfUser === 'agent' ? (
 					<Navigate to="/app/agentes" />
 				) : typeOfUser === 'requester' ? (
