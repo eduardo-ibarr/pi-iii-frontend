@@ -1,9 +1,10 @@
-import { Card, Descriptions, Tag } from 'antd';
+import { Button, Card, Descriptions, Tag } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useShowAgent } from '../../../../hooks/api/agents/useShowAgent';
 import { useParams } from 'react-router';
 import { LoadingSpin } from '../../../../components/LoadingSpin';
+import { Link } from 'react-router-dom';
 
 export const ShowAgent = () => {
 	const { id } = useParams();
@@ -41,14 +42,24 @@ export const ShowAgent = () => {
 	}
 
 	return (
-		<Card>
-			<Descriptions title="Informações do Agente">
-				{agentInfos.map(([label, data], i) => (
-					<Descriptions.Item key={i} label={label}>
-						{data}
-					</Descriptions.Item>
-				))}
-			</Descriptions>
-		</Card>
+		<>
+			<div style={{ textAlign: 'right', marginRight: '10px' }}>
+				<Link to={`/app/agentes/${agent?.id}/atualizar`}>
+					<Button type="primary" style={{ marginBottom: '20px' }}>
+						Atualizar dados
+					</Button>
+				</Link>
+			</div>
+
+			<Card>
+				<Descriptions title="Informações do Agente">
+					{agentInfos.map(([label, data], i) => (
+						<Descriptions.Item key={i} label={label}>
+							{data}
+						</Descriptions.Item>
+					))}
+				</Descriptions>
+			</Card>
+		</>
 	);
 };

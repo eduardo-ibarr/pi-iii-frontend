@@ -9,6 +9,7 @@ import { LoadingSpin } from '../../../../components/LoadingSpin';
 import Typography from 'antd/es/typography/Typography';
 import { useDeleteAgent } from '../../../../hooks/api/agents/useDeleteAgent';
 import { handleError } from '../../../../helpers/handleError';
+import { Link } from 'react-router-dom';
 
 interface DataType {
 	key: React.Key;
@@ -123,11 +124,19 @@ export const ListAgents = () => {
 
 	return (
 		<>
+			<div style={{ textAlign: 'right', marginRight: '10px' }}>
+				<Link to="/app/agentes/novo">
+					<Button type="primary" style={{ marginBottom: '20px' }}>
+						Criar novo agente
+					</Button>
+				</Link>
+			</div>
+
 			<Table
 				columns={columns}
 				dataSource={data}
 				pagination={{
-					pageSize: 10,
+					pageSize: 5,
 				}}
 			/>
 			<Modal
