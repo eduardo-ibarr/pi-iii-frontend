@@ -1,6 +1,13 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { categoriesService } from '../../../services/api';
+import { invalidateAgents } from '../agents/useListAgents';
 
-export function useCreateCategory() {
-	return useMutation(categoriesService.deleteCategory);
+export function useDeleteCategory() {
+	const queryClient = useQueryClient();
+
+	return useMutation(categoriesService.deleteCategory, {
+		onSuccess: () => {
+			invalidateAgents(queryClient);
+		},
+	});
 }
