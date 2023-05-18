@@ -3,16 +3,17 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useUpdateAgent } from '../../../../hooks/api/agents/useUpdateAgent';
 import { IUpdateAgent } from '../../../../interfaces/update';
-import { openSuccessNotification } from '../../../../components';
+import { LoadingSpin, openSuccessNotification } from '../../../../components';
 import { handleError } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 import { useShowAgent } from '../../../../hooks/api/agents/useShowAgent';
-import { compare, compareSync } from 'bcryptjs';
 
 export const UpdateAgent = () => {
 	const { id } = useParams();
 
 	const { data: agent, isLoading: isLoadingShow } = useShowAgent(id as string);
+	const { mutateAsync: updateAgent, isLoading: isLoadingUpdate } =
+		useUpdateAgent(id as string);
 
 	const [wantUpdatePassword, setWantUpdatePassword] = useState(false);
 
@@ -23,8 +24,9 @@ export const UpdateAgent = () => {
 		}
 	>();
 
-	const { mutateAsync: updateAgent, isLoading: isLoadingUpdate } =
-		useUpdateAgent(id as string);
+	if (isLoadingShow) {
+		return <LoadingSpin />;
+	}
 
 	const onFinish = async ({
 		available,
@@ -41,7 +43,8 @@ export const UpdateAgent = () => {
 					? { available, email, name, password: newPassword }
 					: { available, email, name }
 			);
-			openSuccessNotification('Agente cadastrado com sucesso.');
+
+			openSuccessNotification('Agente atualizado com sucesso.');
 		} catch (error) {
 			handleError(error);
 		}

@@ -5,7 +5,7 @@ import { setAccessToken } from '../../../helpers/auth';
 
 export function useLogin() {
 	return useMutation(authService.login, {
-		onSuccess: ({ token }: IAuth) => {
+		onSuccess: (token: IAuth) => {
 			setAccessToken(token);
 		},
 	});

@@ -2,28 +2,18 @@ import { useContext, useMemo } from 'react';
 import AppContext from '../../contexts/AppContext';
 
 const useAppContext = () => {
-	const {
-		isLoggedIn,
-		setLoggedIn,
-		setTypeOfUser,
-		typeOfUser,
-		setUserEmail,
-		userEmail,
-	} = useContext(AppContext);
+	const { isLoggedIn, setLoggedIn, typeOfUser, setUserEmail, userEmail } =
+		useContext(AppContext);
 
 	const handleLogin = () => {
 		setLoggedIn(true);
-	};
-
-	const handleSetTypeOfUser = (type: string) => {
-		setTypeOfUser(type);
 	};
 
 	const handleSetUserEmail = (email: string) => {
 		setUserEmail(email);
 	};
 
-	const handleLogout = () => {
+	const handleLogoff = () => {
 		setLoggedIn(false);
 	};
 
@@ -31,8 +21,7 @@ const useAppContext = () => {
 		() => ({
 			isLoggedIn,
 			handleLogin,
-			handleLogout,
-			handleSetTypeOfUser,
+			handleLogoff,
 			handleSetUserEmail,
 			userEmail,
 			typeOfUser,
@@ -40,8 +29,7 @@ const useAppContext = () => {
 		[
 			isLoggedIn,
 			handleLogin,
-			handleLogout,
-			handleSetTypeOfUser,
+			handleLogoff,
 			handleSetUserEmail,
 			userEmail,
 			typeOfUser,

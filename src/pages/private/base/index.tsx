@@ -57,7 +57,7 @@ export const PrivateBase = ({ children }: ParentPage) => {
 	const { mutateAsync: turnAvailability, isLoading: isLoadingUpdate } =
 		useTurnAvailability();
 
-	const { handleLogout, userEmail, typeOfUser } = useAppContext();
+	const { handleLogoff, userEmail, typeOfUser } = useAppContext();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -67,10 +67,10 @@ export const PrivateBase = ({ children }: ParentPage) => {
 
 	const handleOk = async () => {
 		try {
-			handleLogout();
+			handleLogoff();
 
 			if (typeOfUser === 'agent') {
-				await turnAvailability({ email: userEmail, available: false });
+				await turnAvailability({ email: userEmail || '', available: false });
 			}
 
 			// await logoff();
