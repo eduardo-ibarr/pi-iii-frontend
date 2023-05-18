@@ -59,6 +59,12 @@ export const CreateAgent = () => {
 				</Form.Item>
 				<Form.Item
 					style={{ marginBottom: '30px' }}
+					rules={[
+						{
+							required: true,
+							message: 'A disponibilidade do agente é obrigatória',
+						},
+					]}
 					name="available"
 					label="Disponibilidade atual do agente:"
 				>
