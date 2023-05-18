@@ -5,6 +5,7 @@ import { useShowAgent } from '../../../../hooks/api/agents/useShowAgent';
 import { useParams } from 'react-router';
 import { LoadingSpin } from '../../../../components/LoadingSpin';
 import { Link } from 'react-router-dom';
+import Title from 'antd/es/typography/Title';
 
 export const ShowAgent = () => {
 	const { id } = useParams();
@@ -21,11 +22,6 @@ export const ShowAgent = () => {
 		agentInfos = [
 			['Nome', agent.name],
 			['Email', agent.email],
-			['Criado em', new Date(agent.created_at).toLocaleDateString('pt-BR')],
-			[
-				'Atualizado em',
-				new Date(agent?.created_at).toLocaleDateString('pt-BR'),
-			],
 			[
 				'Status',
 				agent.available ? (
@@ -38,6 +34,8 @@ export const ShowAgent = () => {
 					</Tag>
 				),
 			],
+			['Criado em', new Date(agent.created_at).toLocaleString('pt-BR')],
+			['Atualizado em', new Date(agent.updated_at).toLocaleString('pt-BR')],
 		];
 	}
 
@@ -52,7 +50,10 @@ export const ShowAgent = () => {
 			</div>
 
 			<Card>
-				<Descriptions title="Informações do Agente">
+				<Title level={3} style={{ marginBottom: '20px' }}>
+					Informações do Agente
+				</Title>
+				<Descriptions column={1}>
 					{agentInfos.map(([label, data], i) => (
 						<Descriptions.Item key={i} label={label}>
 							{data}
