@@ -91,13 +91,20 @@ export const UpdateAgent = () => {
 
 				<Form.Item
 					rules={[
-						{ required: true, message: 'O email do agente é obrigatório' },
+						{
+							required: true,
+							message: 'A disponibilidade do agente é obrigatória',
+						},
 					]}
 					style={{ marginBottom: '30px' }}
 					name="available"
 					label="Disponibilidade atual do agente:"
 				>
-					<Switch checkedChildren="Online" unCheckedChildren="Offline" />
+					<Switch
+						defaultChecked
+						checkedChildren="Online"
+						unCheckedChildren="Offline"
+					/>
 				</Form.Item>
 
 				<Form.Item>

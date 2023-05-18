@@ -15,6 +15,7 @@ import Typography from 'antd/es/typography/Typography';
 import { useDeleteAgent } from '../../../../hooks/api/agents/useDeleteAgent';
 import { handleError } from '../../../../helpers/handleError';
 import { Link } from 'react-router-dom';
+import { openSuccessNotification } from '../../../../components';
 
 interface DataType {
 	key: React.Key;
@@ -139,7 +140,7 @@ export const ListAgents = () => {
 		name: agent.name,
 		email: agent.email,
 		status: agent.available,
-		createdAt: new Date(agent.created_at).toLocaleDateString('pt-BR'),
+		createdAt: new Date(agent.created_at).toLocaleString('pt-BR'),
 		moreInfo: agent.id,
 	}));
 
@@ -148,6 +149,8 @@ export const ListAgents = () => {
 	const handleOk = async () => {
 		try {
 			await deleteAgent(idAgentToDelete);
+
+			openSuccessNotification('Agente excluído com sucesso.');
 		} catch (error) {
 			handleError(error);
 		}
@@ -184,7 +187,7 @@ export const ListAgents = () => {
 				onOk={handleOk}
 				onCancel={handleCancel}
 			>
-				<Typography>Tem certeza de que deseja excluir esse agente?</Typography>
+				<Typography>Tem certeza que deseja excluir esse agente?</Typography>
 			</Modal>
 		</>
 	);
