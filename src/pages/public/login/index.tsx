@@ -12,8 +12,7 @@ import { handleError } from '../../../helpers/handleError';
 export const LoginPage = () => {
 	const [form] = Form.useForm<ILogin>();
 
-	const { handleLogin, handleSetTypeOfUser, typeOfUser, handleSetUserEmail } =
-		useAppContext();
+	const { handleLogin, typeOfUser, handleSetUserEmail } = useAppContext();
 
 	const {
 		mutateAsync: turnAvailability,
@@ -28,15 +27,11 @@ export const LoginPage = () => {
 	} = useLogin();
 
 	const onFinish = async ({ email, password, type_of_user }: ILogin) => {
-		console.log({ email, password, type_of_user });
-
 		try {
 			await login({ email, password, type_of_user });
 			await turnAvailability({ email, available: true });
 
 			handleLogin();
-
-			handleSetTypeOfUser(type_of_user);
 			handleSetUserEmail(email);
 
 			openSuccessNotification('Login realizado com sucesso.');

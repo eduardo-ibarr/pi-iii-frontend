@@ -9,5 +9,7 @@ export const handleError = (error: any) => {
 		const errorObj: IRequestError = error?.response?.data;
 		openErrorNotification(translateErrorMessage(errorObj.message));
 		console.error(errorObj);
+	} else {
+		console.error(error);
 	}
 };

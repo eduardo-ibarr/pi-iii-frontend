@@ -1,32 +1,42 @@
-import jwtDecode from 'jwt-decode';
+import { IAuth } from '../interfaces/modules/IAuth';
+import moment from 'moment';
 
-export const ACCESS_TOKEN = '@sistemadevendas-token';
+export const ACCESS_TOKEN = 'auth-token';
 
-interface ITokenDecoded {
-	userID: string;
-	iat: number;
-	exp: number;
+interface ITokenStoraged extends IAuth {
+	expirationDate: moment.Moment;
 }
 
-export const getAccessToken = (): string | null => {
-	const token = localStorage.getItem(ACCESS_TOKEN);
+export const clearAccessToken = (): void =>
+	localStorage.removeItem(ACCESS_TOKEN);
 
-	if (token) {
-		const decodedToken = jwtDecode<ITokenDecoded>(token);
+export const getAccessToken = (): ITokenStoraged | null => {
+	const data = localStorage.getItem(ACCESS_TOKEN);
+	const now = moment().utc();
 
-		if (decodedToken.exp * 1000 < Date.now()) {
-			clearAccessToken();
-			return null;
+	if (data) {
+		const result: ITokenStoraged = JSON.parse(data);
+
+		if (result && moment(result.expirationDate).utc() > now) {
+			return result;
 		}
 
-		return token;
+		clearAccessToken();
+
+		return null;
 	}
 
 	return null;
 };
 
-export const clearAccessToken = (): void =>
-	localStorage.removeItem(ACCESS_TOKEN);
+export const setAccessToken = (data: IAuth): void => {
+	const now = moment().utc();
+	const expiresAt = moment(now).add(data.expiresIn, 'seconds');
 
-export const setAccessToken = (token: string): void =>
-	localStorage.setItem(ACCESS_TOKEN, token);
+	const tokenData: ITokenStoraged = {
+		...data,
+		expirationDate: expiresAt,
+	};
+
+	localStorage.setItem(ACCESS_TOKEN, JSON.stringify(tokenData));
+};

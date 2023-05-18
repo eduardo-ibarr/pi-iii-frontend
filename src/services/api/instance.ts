@@ -8,9 +8,9 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
-	const token = getAccessToken();
+	const data = getAccessToken();
 
-	config.headers['x-access-token'] = token;
+	config.headers['x-access-token'] = data?.token;
 
 	return config;
 });
