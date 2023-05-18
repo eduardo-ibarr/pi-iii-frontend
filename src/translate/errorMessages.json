@@ -15,8 +15,11 @@
 	"Conversation not found.": "Conversa não encontrada.",
 	"The conversation informed does not exists.": "A conversa informada não existe.",
 	"Message not found.": "Mensagem não encontrada.",
-	"Requester not found.": "Requerente não encontrado.",
+	"Requester not found.": "Requisitante não encontrado.",
+	"Requester not exists.": "O requisitante não existe na base de dados.",
+	"Agent not exists.": "O agente não existe na base de dados.",
 	"Already exists a sector with this name.": "Já existe um setor com esse nome.",
 	"Sector not found.": "Setor não encontrado.",
-	"Ticket not found.": "Ticket não encontrado."
+	"Ticket not found.": "Ticket não encontrado.",
+	"Validation failed": "Dados inválidos."
 }
