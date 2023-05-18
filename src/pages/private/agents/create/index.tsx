@@ -1,7 +1,7 @@
 import { Card, Input, Button, Form, Spin, Switch } from 'antd';
 import React from 'react';
 import { ICreateAgent } from '../../../../interfaces/create';
-import { useCreateAgent } from '../../../../hooks/api/agents/useCreateAgent';
+import { useCreateAgent } from '../../../../hooks/api/agents';
 import { openSuccessNotification } from '../../../../components';
 import { handleError } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
