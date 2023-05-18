@@ -1,7 +1,12 @@
-import { Button, Modal, Table, Tooltip } from 'antd';
+import { Button, Modal, Table, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
-import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+	SearchOutlined,
+	DeleteOutlined,
+	CheckCircleOutlined,
+	ClockCircleOutlined,
+} from '@ant-design/icons';
 import { useListAgents } from '../../../../hooks/api/agents/useListAgents';
 import { IAgent } from '../../../../interfaces/modules';
 import { useNavigate } from 'react-router';
@@ -9,6 +14,7 @@ import { LoadingSpin } from '../../../../components/LoadingSpin';
 import Typography from 'antd/es/typography/Typography';
 import { useDeleteAgent } from '../../../../hooks/api/agents/useDeleteAgent';
 import { handleError } from '../../../../helpers/handleError';
+import { Link } from 'react-router-dom';
 
 interface DataType {
 	key: React.Key;
@@ -40,6 +46,20 @@ export const ListAgents = () => {
 		{
 			title: 'Nome',
 			dataIndex: 'name',
+		},
+		{
+			title: 'Status',
+			dataIndex: 'status',
+			render: (available) =>
+				available ? (
+					<Tag icon={<CheckCircleOutlined />} color="success">
+						Online
+					</Tag>
+				) : (
+					<Tag icon={<ClockCircleOutlined />} color="default">
+						Offline
+					</Tag>
+				),
 		},
 		{
 			title: 'Email',
@@ -99,13 +119,31 @@ export const ListAgents = () => {
 		);
 	}
 
+	const sortAgentsByName = (data: DataType[]): DataType[] => {
+		return data.sort((a, b) => {
+			const nameA = a.name.toLowerCase();
+			const nameB = b.name.toLowerCase();
+
+			if (nameA < nameB) {
+				return -1;
+			}
+			if (nameA > nameB) {
+				return 1;
+			}
+			return 0;
+		});
+	};
+
 	const data: DataType[] = (agents as IAgent[]).map((agent, i) => ({
 		key: i,
 		name: agent.name,
 		email: agent.email,
+		status: agent.available,
 		createdAt: new Date(agent.created_at).toLocaleDateString('pt-BR'),
 		moreInfo: agent.id,
 	}));
+
+	const dataSorted = sortAgentsByName(data);
 
 	const handleOk = async () => {
 		try {
@@ -123,13 +161,22 @@ export const ListAgents = () => {
 
 	return (
 		<>
+			<div style={{ textAlign: 'right', marginRight: '10px' }}>
+				<Link to="/app/agentes/novo">
+					<Button type="primary" style={{ marginBottom: '20px' }}>
+						Criar novo agente
+					</Button>
+				</Link>
+			</div>
+
 			<Table
 				columns={columns}
-				dataSource={data}
+				dataSource={dataSorted}
 				pagination={{
-					pageSize: 10,
+					pageSize: 5,
 				}}
 			/>
+
 			<Modal
 				title="Cuidado!"
 				open={isModalOpen}

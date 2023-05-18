@@ -25,34 +25,38 @@ export const PrivateRoutes = () => {
 		return <Navigate to="/login" />;
 	}
 
-	return (
-		<>
-			{typeOfUser === 'agent' ? (
-				<PrivateBase>
-					<Routes>
-						<Route path="/agentes" element={<ListAgents />} />
-						<Route path="/agentes/novo" element={<CreateAgent />} />
-						<Route path="/agentes/:id" element={<ShowAgent />} />
-						<Route path="/agentes/:id/atualizar" element={<UpdateAgent />} />
-					</Routes>
-				</PrivateBase>
-			) : typeOfUser === 'requester' ? (
-				<PrivateBase>
-					<Routes>
-						<Route path="/requisitantes" element={<ListRequesters />} />
-						<Route path="/requisitantes/novo" element={<CreateRequester />} />
-						<Route path="/requisitantes/:id" element={<ShowRequester />} />
-						<Route
-							path="/requisitantes/:id/atualizar"
-							element={<UpdateRequester />}
-						/>
-					</Routes>
-				</PrivateBase>
-			) : (
+	if (!typeOfUser) {
+		return null;
+	}
+
+	if (typeOfUser === 'agent') {
+		return (
+			<PrivateBase>
 				<Routes>
-					<Route path="/*" element={<Navigate to="/404" replace />} />
+					<Route path="/agentes" element={<ListAgents />} />
+					<Route path="/agentes/novo" element={<CreateAgent />} />
+					<Route path="/agentes/:id" element={<ShowAgent />} />
+					<Route path="/agentes/:id/atualizar" element={<UpdateAgent />} />
 				</Routes>
-			)}
-		</>
-	);
+			</PrivateBase>
+		);
+	}
+
+	if (typeOfUser === 'requester') {
+		return (
+			<PrivateBase>
+				<Routes>
+					<Route path="/requisitantes" element={<ListRequesters />} />
+					<Route path="/requisitantes/novo" element={<CreateRequester />} />
+					<Route path="/requisitantes/:id" element={<ShowRequester />} />
+					<Route
+						path="/requisitantes/:id/atualizar"
+						element={<UpdateRequester />}
+					/>
+				</Routes>
+			</PrivateBase>
+		);
+	}
+
+	return <Navigate to="/404" replace />;
 };
