@@ -1,12 +1,11 @@
 import { Card, Input, Switch, Button, Spin, Form, Checkbox } from 'antd';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useUpdateAgent } from '../../../../hooks/api/agents/useUpdateAgent';
+import { useUpdateAgent, useShowAgent } from '../../../../hooks/api/agents';
 import { IUpdateAgent } from '../../../../interfaces/update';
 import { LoadingSpin, openSuccessNotification } from '../../../../components';
 import { handleError } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
-import { useShowAgent } from '../../../../hooks/api/agents/useShowAgent';
 
 export const UpdateAgent = () => {
 	const { id } = useParams();

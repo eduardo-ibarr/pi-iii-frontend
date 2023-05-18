@@ -10,6 +10,13 @@ import {
 } from '../../pages/private/agents';
 
 import {
+	CreateCategory,
+	ListCategories,
+	ShowCategory,
+	UpdateCategory,
+} from '../../pages/private/categories';
+
+import {
 	CreateRequester,
 	ListRequesters,
 	ShowRequester,
@@ -37,6 +44,14 @@ export const PrivateRoutes = () => {
 					<Route path="/agentes/novo" element={<CreateAgent />} />
 					<Route path="/agentes/:id" element={<ShowAgent />} />
 					<Route path="/agentes/:id/atualizar" element={<UpdateAgent />} />
+
+					<Route path="/categorias" element={<ListCategories />} />
+					<Route path="/categorias/nova" element={<CreateCategory />} />
+					<Route path="/categorias/:id" element={<ShowCategory />} />
+					<Route
+						path="/categorias/:id/atualizar"
+						element={<UpdateCategory />}
+					/>
 				</Routes>
 			</PrivateBase>
 		);

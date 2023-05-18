@@ -1,7 +1,7 @@
 import { Button, Card, Descriptions, Tag } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import React from 'react';
-import { useShowAgent } from '../../../../hooks/api/agents/useShowAgent';
+import { useShowAgent } from '../../../../hooks/api/agents';
 import { useParams } from 'react-router';
 import { LoadingSpin } from '../../../../components/LoadingSpin';
 import { Link } from 'react-router-dom';

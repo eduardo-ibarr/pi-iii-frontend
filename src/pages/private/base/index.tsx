@@ -14,9 +14,10 @@ import React, { useState } from 'react';
 
 import {
 	DesktopOutlined,
-	FileOutlined,
+	FundOutlined,
 	UserOutlined,
 	LogoutOutlined,
+	ToolOutlined,
 } from '@ant-design/icons';
 
 import type { MenuProps } from 'antd';
@@ -118,8 +119,8 @@ export const PrivateBase = ({ children }: ParentPage) => {
 	if (typeOfUser === 'agent') {
 		items = [
 			getItem('Agentes', '1', <UserOutlined />),
-			getItem('Categorias', '2', <FileOutlined />),
-			getItem('Tickets', '3', <FileOutlined />),
+			getItem('Categorias', '2', <ToolOutlined />),
+			getItem('Tickets', '3', <FundOutlined />),
 		];
 	}
 
@@ -127,7 +128,7 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		items = [
 			getItem('Requisitantes', '1', <UserOutlined />),
 			getItem('Setores', '2', <DesktopOutlined />),
-			getItem('Tickets', '3', <FileOutlined />),
+			getItem('Tickets', '3', <FundOutlined />),
 		];
 	}
 
