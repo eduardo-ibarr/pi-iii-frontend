@@ -7,13 +7,11 @@ import { handleError } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 
 export const CreateCategory = () => {
-	const [form] = Form.useForm<ICreateCategory & { retypedPassword: string }>();
+	const [form] = Form.useForm<ICreateCategory>();
 
 	const { mutateAsync: createCategory, isLoading } = useCreateCategory();
 
-	const onFinish = async ({
-		name,
-	}: ICreateCategory & { retypedPassword: string }) => {
+	const onFinish = async ({ name }: ICreateCategory) => {
 		try {
 			await createCategory({ name });
 			openSuccessNotification('Categoria criada com sucesso.');

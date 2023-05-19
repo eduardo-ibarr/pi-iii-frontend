@@ -14,7 +14,6 @@ import React, { useState } from 'react';
 
 import {
 	DesktopOutlined,
-	FundOutlined,
 	UserOutlined,
 	LogoutOutlined,
 	ToolOutlined,
@@ -31,6 +30,8 @@ import { IRequestError } from '../../../interfaces/requestError';
 import useAppContext from '../../../hooks/app/useAppContext';
 import { clearAccessToken } from '../../../helpers/auth';
 import { useTurnAvailability } from '../../../hooks/api/agents/useTurnAvailability';
+
+import { BsFillTicketDetailedFill } from 'react-icons/bs';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -120,7 +121,7 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		items = [
 			getItem('Agentes', '1', <UserOutlined />),
 			getItem('Categorias', '2', <ToolOutlined />),
-			getItem('Tickets', '3', <FundOutlined />),
+			getItem('Tickets', '3', <BsFillTicketDetailedFill />),
 		];
 	}
 
@@ -128,7 +129,7 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		items = [
 			getItem('Requisitantes', '1', <UserOutlined />),
 			getItem('Setores', '2', <DesktopOutlined />),
-			getItem('Tickets', '3', <FundOutlined />),
+			getItem('Tickets', '3', <BsFillTicketDetailedFill />),
 		];
 	}
 

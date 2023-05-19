@@ -7,7 +7,7 @@ import { handleError } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 
 export const CreateAgent = () => {
-	const [form] = Form.useForm<ICreateAgent & { retypedPassword: string }>();
+	const [form] = Form.useForm<ICreateAgent>();
 
 	const { mutateAsync: createAgent, isLoading } = useCreateAgent();
 
@@ -16,7 +16,7 @@ export const CreateAgent = () => {
 		email,
 		name,
 		password,
-	}: ICreateAgent & { retypedPassword: string }) => {
+	}: ICreateAgent) => {
 		try {
 			await createAgent({ available, email, name, password });
 			openSuccessNotification('Agente cadastrado com sucesso.');
