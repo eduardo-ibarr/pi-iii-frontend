@@ -16,12 +16,7 @@ export const UpdateAgent = () => {
 
 	const [wantUpdatePassword, setWantUpdatePassword] = useState(false);
 
-	const [form] = Form.useForm<
-		IUpdateAgent & {
-			retypedPassword: string;
-			newPassword: string;
-		}
-	>();
+	const [form] = Form.useForm<IUpdateAgent>();
 
 	if (isLoadingShow) {
 		return <LoadingSpin />;
@@ -31,15 +26,12 @@ export const UpdateAgent = () => {
 		available,
 		email,
 		name,
-		newPassword,
-	}: IUpdateAgent & {
-		retypedPassword: string;
-		newPassword: string;
-	}) => {
+		password,
+	}: IUpdateAgent) => {
 		try {
 			await updateAgent(
-				newPassword
-					? { available, email, name, password: newPassword }
+				password
+					? { available, email, name, password: password }
 					: { available, email, name }
 			);
 
@@ -119,7 +111,7 @@ export const UpdateAgent = () => {
 							message: 'A nova senha é obrigatória',
 						},
 					]}
-					name="newPassword"
+					name="password"
 					label="Informe a nova senha:"
 				>
 					<Input.Password disabled={!wantUpdatePassword} />
@@ -133,7 +125,7 @@ export const UpdateAgent = () => {
 						},
 						{
 							validator: (rule, value, callback) => {
-								if (value === form.getFieldValue('newPassword')) {
+								if (value === form.getFieldValue('password')) {
 									callback();
 								} else {
 									callback(
