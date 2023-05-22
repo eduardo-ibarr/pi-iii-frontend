@@ -1,45 +1,39 @@
-import { Button, Modal, Table, Tag, Tooltip } from 'antd';
+import { Button, Modal, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
-import {
-	SearchOutlined,
-	DeleteOutlined,
-	CheckCircleOutlined,
-	ClockCircleOutlined,
-} from '@ant-design/icons';
-import { useListAgents, useDeleteAgent } from '../../../../hooks/api/agents';
-import { IAgent } from '../../../../interfaces/modules';
+import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ISector } from '../../../../interfaces/modules';
 import { useNavigate } from 'react-router';
 import { LoadingSpin } from '../../../../components/LoadingSpin';
 import Typography from 'antd/es/typography/Typography';
 import { handleError } from '../../../../helpers/handleError';
 import { Link } from 'react-router-dom';
 import { openSuccessNotification } from '../../../../components';
+import { useListSectors, useDeleteSector } from '../../../../hooks/api/sectors';
 import { sortByName } from '../../../../helpers';
 
 interface DataType {
 	key: React.Key;
 	name: string;
-	email: string;
 	createdAt: string;
 	moreInfo: string;
 }
 
-export const ListAgents = () => {
+export const ListSectors = () => {
 	const history = useNavigate();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [idAgentToDelete, setIdAgentToDelete] = useState('');
+	const [idSectorToDelete, setIdSectorToDelete] = useState('');
 
-	const { data: agents, isLoading: isLoadingList } = useListAgents();
-	const { mutateAsync: deleteAgent } = useDeleteAgent();
+	const { data: sectors, isLoading: isLoadingList } = useListSectors();
+	const { mutateAsync: deleteSector } = useDeleteSector();
 
 	const handleShowMoreInfo = (id: string) => {
-		history(`/app/agentes/${id}`);
+		history(`/app/setores/${id}`);
 	};
 
 	const showModal = (id: string) => {
-		setIdAgentToDelete(id);
+		setIdSectorToDelete(id);
 		setIsModalOpen(true);
 	};
 
@@ -49,25 +43,7 @@ export const ListAgents = () => {
 			dataIndex: 'name',
 		},
 		{
-			title: 'Status',
-			dataIndex: 'status',
-			render: (available) =>
-				available ? (
-					<Tag icon={<CheckCircleOutlined />} color="success">
-						Online
-					</Tag>
-				) : (
-					<Tag icon={<ClockCircleOutlined />} color="default">
-						Offline
-					</Tag>
-				),
-		},
-		{
-			title: 'Email',
-			dataIndex: 'email',
-		},
-		{
-			title: 'Criado em',
+			title: 'Criada em',
 			dataIndex: 'createdAt',
 		},
 		{
@@ -105,37 +81,20 @@ export const ListAgents = () => {
 		return <LoadingSpin />;
 	}
 
-	if (!agents) {
-		return (
-			<div
-				style={{
-					height: '100%',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				<Typography>Sem dados na base.</Typography>
-			</div>
-		);
-	}
-
-	const data: DataType[] = (agents as IAgent[]).map((agent, i) => ({
+	const data: DataType[] = (sectors as ISector[]).map((sector, i) => ({
 		key: i,
-		name: agent.name,
-		email: agent.email,
-		status: agent.available,
-		createdAt: new Date(agent.created_at).toLocaleString('pt-BR'),
-		moreInfo: agent.id,
+		name: sector.name,
+		createdAt: new Date(sector.created_at).toLocaleString('pt-BR'),
+		moreInfo: sector.id,
 	}));
 
 	const dataSorted = sortByName(data);
 
 	const handleOk = async () => {
 		try {
-			await deleteAgent(idAgentToDelete);
+			await deleteSector(idSectorToDelete);
 
-			openSuccessNotification('Agente excluído com sucesso.');
+			openSuccessNotification('Setor excluído com sucesso.');
 		} catch (error) {
 			handleError(error);
 		}
@@ -150,9 +109,9 @@ export const ListAgents = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to="/app/agentes/novo">
+				<Link to="/app/setores/novo">
 					<Button type="primary" style={{ marginBottom: '20px' }}>
-						Criar novo agente
+						Criar novo setor
 					</Button>
 				</Link>
 			</div>
@@ -173,7 +132,7 @@ export const ListAgents = () => {
 				onCancel={handleCancel}
 			>
 				<Typography>
-					Tem certeza que deseja excluir definitivamente esse agente?
+					Tem certeza que deseja excluir definitivamente esse setor?
 				</Typography>
 			</Modal>
 		</>

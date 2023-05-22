@@ -1,6 +1,13 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { sectorsService } from '../../../services/api';
+import { invalidateSectors } from './useListSectors';
 
 export function useDeleteSector() {
-	return useMutation(sectorsService.deleteSector);
+	const queryClient = useQueryClient();
+
+	return useMutation(sectorsService.deleteSector, {
+		onSuccess: () => {
+			invalidateSectors(queryClient);
+		},
+	});
 }

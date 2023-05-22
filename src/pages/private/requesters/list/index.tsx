@@ -13,6 +13,7 @@ import {
 	useListRequesters,
 	useDeleteRequester,
 } from '../../../../hooks/api/requesters';
+import { sortByName } from '../../../../helpers';
 
 interface DataType {
 	key: React.Key;
@@ -88,21 +89,6 @@ export const ListRequesters = () => {
 		return <LoadingSpin />;
 	}
 
-	const sortAgentsByName = (data: DataType[]): DataType[] => {
-		return data.sort((a, b) => {
-			const nameA = a.name.toLowerCase();
-			const nameB = b.name.toLowerCase();
-
-			if (nameA < nameB) {
-				return -1;
-			}
-			if (nameA > nameB) {
-				return 1;
-			}
-			return 0;
-		});
-	};
-
 	const data: DataType[] = (requesters as IRequester[]).map((requester, i) => ({
 		key: i,
 		name: requester.name,
@@ -111,7 +97,7 @@ export const ListRequesters = () => {
 		moreInfo: requester.id,
 	}));
 
-	const dataSorted = sortAgentsByName(data);
+	const dataSorted = sortByName(data);
 
 	const handleOk = async () => {
 		try {
@@ -155,7 +141,7 @@ export const ListRequesters = () => {
 				onCancel={handleCancel}
 			>
 				<Typography>
-					Tem certeza que deseja excluir esse requisitante?
+					Tem certeza que deseja excluir definitivamente esse requisitante?
 				</Typography>
 			</Modal>
 		</>
