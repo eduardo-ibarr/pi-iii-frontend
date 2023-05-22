@@ -25,6 +25,13 @@ import {
 
 import { PrivateBase } from '../../pages/private/base';
 
+import {
+	CreateSector,
+	ListSectors,
+	ShowSector,
+	UpdateSector,
+} from '../../pages/private/sectors';
+
 export const PrivateRoutes = () => {
 	const { isLoggedIn, typeOfUser } = useAppContext();
 
@@ -68,6 +75,11 @@ export const PrivateRoutes = () => {
 						path="/requisitantes/:id/atualizar"
 						element={<UpdateRequester />}
 					/>
+
+					<Route path="/setores" element={<ListSectors />} />
+					<Route path="/setores/novo" element={<CreateSector />} />
+					<Route path="/setores/:id" element={<ShowSector />} />
+					<Route path="/setores/:id/atualizar" element={<UpdateSector />} />
 				</Routes>
 			</PrivateBase>
 		);

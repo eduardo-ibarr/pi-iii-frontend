@@ -13,6 +13,7 @@ import {
 	useListCategories,
 	useDeleteCategory,
 } from '../../../../hooks/api/categories';
+import { sortByName } from '../../../../helpers';
 
 interface DataType {
 	key: React.Key;
@@ -83,29 +84,14 @@ export const ListCategories = () => {
 		return <LoadingSpin />;
 	}
 
-	const sortAgentsByName = (data: DataType[]): DataType[] => {
-		return data.sort((a, b) => {
-			const nameA = a.name.toLowerCase();
-			const nameB = b.name.toLowerCase();
-
-			if (nameA < nameB) {
-				return -1;
-			}
-			if (nameA > nameB) {
-				return 1;
-			}
-			return 0;
-		});
-	};
-
-	const data: DataType[] = (categories as ICategory[]).map((agent, i) => ({
+	const data: DataType[] = (categories as ICategory[]).map((category, i) => ({
 		key: i,
-		name: agent.name,
-		createdAt: new Date(agent.created_at).toLocaleString('pt-BR'),
-		moreInfo: agent.id,
+		name: category.name,
+		createdAt: new Date(category.created_at).toLocaleString('pt-BR'),
+		moreInfo: category.id,
 	}));
 
-	const dataSorted = sortAgentsByName(data);
+	const dataSorted = sortByName(data);
 
 	const handleOk = async () => {
 		try {
@@ -148,7 +134,9 @@ export const ListCategories = () => {
 				onOk={handleOk}
 				onCancel={handleCancel}
 			>
-				<Typography>Tem certeza que deseja excluir essa categoria?</Typography>
+				<Typography>
+					Tem certeza que deseja excluir definitivamente essa categoria?
+				</Typography>
 			</Modal>
 		</>
 	);
