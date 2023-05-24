@@ -31,6 +31,9 @@ import {
 	ShowSector,
 	UpdateSector,
 } from '../../pages/private/sectors';
+import { CreateTicket } from '../../pages/private/tickets/requester/createTicket';
+import ListTicketsByRequesterSide from '../../pages/private/tickets/requester/listTickets';
+import { ShowTicketsByRequesterSide } from '../../pages/private/tickets/requester/showTicket';
 
 export const PrivateRoutes = () => {
 	const { isLoggedIn, typeOfUser } = useAppContext();
@@ -80,6 +83,19 @@ export const PrivateRoutes = () => {
 					<Route path="/setores/novo" element={<CreateSector />} />
 					<Route path="/setores/:id" element={<ShowSector />} />
 					<Route path="/setores/:id/atualizar" element={<UpdateSector />} />
+
+					<Route
+						path="/requisitantes/tickets/novo"
+						element={<CreateTicket />}
+					/>
+					<Route
+						path="/requisitantes/tickets"
+						element={<ListTicketsByRequesterSide />}
+					/>
+					<Route
+						path="/requisitantes/tickets/:id"
+						element={<ShowTicketsByRequesterSide />}
+					/>
 				</Routes>
 			</PrivateBase>
 		);

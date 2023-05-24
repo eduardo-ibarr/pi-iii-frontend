@@ -102,11 +102,25 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		.filter((item) => item !== 'app');
 
 	const handleNavigate = (event: any) => {
-		history(
-			`/app/${(
-				items.find((i) => i?.key === event.key) as MenuItem & { label: string }
-			)?.label.toLowerCase()}`
-		);
+		const menuItem = items.find((i) => i?.key === event.key) as MenuItem & {
+			label: string;
+		};
+
+		console.log(menuItem);
+
+		let path = `/app/${menuItem.label.toLocaleLowerCase()}`;
+
+		if (menuItem.label === 'Tickets') {
+			if (typeOfUser === 'agent') {
+				path = '/app/agentes/tickets';
+			}
+
+			if (typeOfUser === 'requester') {
+				path = '/app/requisitantes/tickets';
+			}
+		}
+
+		history(path);
 	};
 
 	// getItem('User', 'sub1', <UserOutlined />, [
