@@ -5,10 +5,11 @@ import { TUser } from '../types/TUser';
 
 interface IAppContext {
 	isLoggedIn: boolean;
+	userId: string | null;
 	userEmail: string | null;
 	typeOfUser: TUser | string;
 	setLoggedIn: (isLoggedIn: boolean) => void;
-	setUserEmail: (typeOfUser: string) => void;
+	setUserEmail: (email: string) => void;
 }
 
 const AppContext = createContext<IAppContext>({} as IAppContext);
@@ -26,6 +27,11 @@ export const AppProvider = ({ children }: ParentPage) => {
 		return data?.typeOfUser || '';
 	});
 
+	const [userId] = useState<TUser | string>(() => {
+		const data = getAccessToken();
+		return data?.userId || '';
+	});
+
 	const [userEmail, setUserEmail] = useState<string | null>(null);
 
 	return (
@@ -34,6 +40,7 @@ export const AppProvider = ({ children }: ParentPage) => {
 				isLoggedIn,
 				typeOfUser,
 				userEmail,
+				userId,
 				setLoggedIn,
 				setUserEmail,
 			}}
