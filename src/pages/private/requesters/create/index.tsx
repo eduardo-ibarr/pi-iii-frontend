@@ -3,7 +3,7 @@ import React from 'react';
 import { ICreateRequester } from '../../../../interfaces/create';
 import { useCreateRequester } from '../../../../hooks/api/requesters';
 import { openSuccessNotification } from '../../../../components';
-import { handleError } from '../../../../helpers';
+import { handleError, passwordValidator } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 
 export const CreateRequester = () => {
@@ -58,7 +58,20 @@ export const CreateRequester = () => {
 				</Form.Item>
 
 				<Form.Item
-					rules={[{ required: true, message: 'A senha é obrigatória' }]}
+					rules={[
+						{ required: true, message: 'A senha é obrigatória' },
+						{
+							validator: (rule, value, callback) => {
+								if (passwordValidator(form.getFieldValue('password'))) {
+									callback();
+								} else {
+									callback(
+										'A senha deve ter no mínimo 8 caracteres, contendo letras e números.'
+									);
+								}
+							},
+						},
+					]}
 					name="password"
 					label="Informe a senha:"
 				>
