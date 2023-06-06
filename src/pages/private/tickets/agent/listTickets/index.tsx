@@ -29,11 +29,13 @@ export default function ListTicketsByAgentSide() {
 				<div style={{ display: 'flex' }}>
 					<Typography
 						style={{
-							marginRight: '1rem',
+							marginRight: '0.8rem',
 							padding: '0 10px',
+							paddingTop: '1px',
 							borderRadius: '5px',
 							color: '#fff',
 							backgroundColor: '#e04f4f',
+							fontSize: '12px',
 						}}
 					>
 						Novo!

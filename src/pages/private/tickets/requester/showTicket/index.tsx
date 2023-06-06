@@ -24,7 +24,9 @@ export const ShowTicketsByRequesterSide = () => {
 		ticketInfos = [
 			['Assunto', <b key={ticket.id}>{ticket.subject}</b>],
 			['Conteúdo', ticket.content],
+			['Categoria de suporte', ticket.category_name],
 			['Requisitante', ticket.requester_name],
+			['Setor da empresa', ticket.sector_name],
 			[
 				'Status',
 				<Tag key={ticket.id} color={TagColorsByStatus[ticket.status]}>
