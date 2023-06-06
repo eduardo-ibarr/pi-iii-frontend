@@ -6,6 +6,7 @@ import { TUser } from '../types/TUser';
 interface IAppContext {
 	isLoggedIn: boolean;
 	userEmail: string | null;
+	userId: string | null;
 	typeOfUser: TUser | string;
 	setLoggedIn: (isLoggedIn: boolean) => void;
 	setUserEmail: (typeOfUser: string) => void;
@@ -26,6 +27,11 @@ export const AppProvider = ({ children }: ParentPage) => {
 		return data?.typeOfUser || '';
 	});
 
+	const [userId] = useState<TUser | string>(() => {
+		const data = getAccessToken();
+		return data?.userId || '';
+	});
+
 	const [userEmail, setUserEmail] = useState<string | null>(null);
 
 	return (
@@ -34,6 +40,7 @@ export const AppProvider = ({ children }: ParentPage) => {
 				isLoggedIn,
 				typeOfUser,
 				userEmail,
+				userId,
 				setLoggedIn,
 				setUserEmail,
 			}}

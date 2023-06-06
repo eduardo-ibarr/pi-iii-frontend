@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import useAppContext from '../../../../../hooks/app/useAppContext';
 import { useListTicketsByRequester } from '../../../../../hooks/api/tickets/useListTicketsByRequester';
 import { LoadingSpin } from '../../../../../components';
-import { translateStatusMessage } from '../../../../../helpers/translateStatusMessage';
+import { translate } from '../../../../../helpers/';
 import { useNavigate } from 'react-router';
 import { useQueryClient } from 'react-query';
 
@@ -26,7 +26,9 @@ export default function ListTicketsByRequesterSide() {
 
 	const data = tickets?.map((ticket, i) => (
 		<div key={i}>
-			<Tag color="default">{translateStatusMessage(ticket.status)}</Tag>
+			<Tag color="default">
+				{translate({ message: ticket.status, type: 'status' })}
+			</Tag>
 			<a onClick={() => handleShowTicket(ticket.id)}>{ticket.subject}</a>
 		</div>
 	));

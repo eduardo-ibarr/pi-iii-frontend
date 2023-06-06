@@ -70,6 +70,7 @@ export const CreateTicket = () => {
 				requester_id: userId || '',
 				status: 'not viewed',
 				subject,
+				read_status: false,
 			});
 
 			await createConversation({

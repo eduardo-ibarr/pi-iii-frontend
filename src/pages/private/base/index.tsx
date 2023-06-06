@@ -24,7 +24,7 @@ import { ParentPage } from '../../../interfaces/parentPage';
 import { useNavigate } from 'react-router';
 import { useLogoff } from '../../../hooks/api/auth/useLogoff';
 import { openErrorNotification } from '../../../components';
-import { translateErrorMessage } from '../../../helpers/translateErrorMessage';
+import { translate } from '../../../helpers/translate';
 import { AxiosError } from 'axios';
 import { IRequestError } from '../../../interfaces/requestError';
 import useAppContext from '../../../hooks/app/useAppContext';
@@ -82,7 +82,9 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				const errorObj: IRequestError = error?.response?.data;
-				openErrorNotification(translateErrorMessage(errorObj.message));
+				openErrorNotification(
+					translate({ message: errorObj.message, type: 'error' })
+				);
 				console.error(errorObj);
 			}
 		}
@@ -103,13 +105,6 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		.filter((item) => item !== 'app');
 
 	const handleNavigate = (event: any) => {
-<<<<<<< Updated upstream
-		history(
-			`/app/${(
-				items.find((i) => i?.key === event.key) as MenuItem & { label: string }
-			)?.label.toLowerCase()}`
-		);
-=======
 		const menuItem = items.find((i) => i?.key === event.key) as MenuItem & {
 			label: string;
 		};
@@ -127,7 +122,6 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		}
 
 		history(path);
->>>>>>> Stashed changes
 	};
 
 	useEffect(() => {

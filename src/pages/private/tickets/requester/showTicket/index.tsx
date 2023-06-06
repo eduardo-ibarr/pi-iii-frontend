@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import Title from 'antd/es/typography/Title';
 import { useShowTicket } from '../../../../../hooks/api/tickets/useShowTicket';
 import { LoadingSpin } from '../../../../../components';
-import { translateStatusMessage } from '../../../../../helpers/translateStatusMessage';
+import { translate } from '../../../../../helpers/translate';
 import { ChatInterface } from './components/Chat';
 
 export const ShowTicketsByRequesterSide = () => {
@@ -25,7 +25,7 @@ export const ShowTicketsByRequesterSide = () => {
 			[
 				'Status',
 				<Tag key={ticket.id} color="default">
-					{translateStatusMessage(ticket.status)}
+					{translate({ message: ticket.status, type: 'status' })}
 				</Tag>,
 			],
 			['Criado em', new Date(ticket.created_at).toLocaleString('pt-BR')],
