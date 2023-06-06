@@ -4,7 +4,11 @@ import { useParams } from 'react-router-dom';
 import { useUpdateAgent, useShowAgent } from '../../../../hooks/api/agents';
 import { IUpdateAgent } from '../../../../interfaces/update';
 import { LoadingSpin, openSuccessNotification } from '../../../../components';
-import { handleError, passwordValidator } from '../../../../helpers';
+import {
+	handleError,
+	nameValidator,
+	passwordValidator,
+} from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 
 export const UpdateAgent = () => {
@@ -60,6 +64,17 @@ export const UpdateAgent = () => {
 				<Form.Item
 					rules={[
 						{ required: true, message: 'O nome do agente é obrigatório' },
+						{
+							validator: (rule, value, callback) => {
+								if (nameValidator(form.getFieldValue('name'))) {
+									callback();
+								} else {
+									callback(
+										'O nome deve ser completo, contendo apenas letras, sem haver repetições.'
+									);
+								}
+							},
+						},
 					]}
 					style={{ marginBottom: '30px' }}
 					label="Digite o nome do agente:"

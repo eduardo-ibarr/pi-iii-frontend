@@ -3,7 +3,11 @@ import React from 'react';
 import { ICreateAgent } from '../../../../interfaces/create';
 import { useCreateAgent } from '../../../../hooks/api/agents';
 import { openSuccessNotification } from '../../../../components';
-import { handleError, passwordValidator } from '../../../../helpers';
+import {
+	handleError,
+	nameValidator,
+	passwordValidator,
+} from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 
 export const CreateAgent = () => {
@@ -42,9 +46,20 @@ export const CreateAgent = () => {
 				<Form.Item
 					rules={[
 						{ required: true, message: 'O nome do agente é obrigatório' },
+						{
+							validator: (rule, value, callback) => {
+								if (nameValidator(form.getFieldValue('name'))) {
+									callback();
+								} else {
+									callback(
+										'O nome deve ser completo, contendo apenas letras, sem haver repetições.'
+									);
+								}
+							},
+						},
 					]}
 					style={{ marginBottom: '30px' }}
-					label="Digite o nome do agente:"
+					label="Digite o nome completo do agente:"
 					name="name"
 				>
 					<Input />

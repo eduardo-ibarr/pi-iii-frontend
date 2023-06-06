@@ -3,7 +3,11 @@ import React from 'react';
 import { ICreateRequester } from '../../../../interfaces/create';
 import { useCreateRequester } from '../../../../hooks/api/requesters';
 import { openSuccessNotification } from '../../../../components';
-import { handleError, passwordValidator } from '../../../../helpers';
+import {
+	handleError,
+	nameValidator,
+	passwordValidator,
+} from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 
 export const CreateRequester = () => {
@@ -34,6 +38,17 @@ export const CreateRequester = () => {
 				<Form.Item
 					rules={[
 						{ required: true, message: 'O nome do requisitante é obrigatório' },
+						{
+							validator: (rule, value, callback) => {
+								if (nameValidator(form.getFieldValue('name'))) {
+									callback();
+								} else {
+									callback(
+										'O nome deve ser completo, contendo apenas letras, sem haver repetições.'
+									);
+								}
+							},
+						},
 					]}
 					style={{ marginBottom: '30px' }}
 					label="Digite o nome da categoria:"

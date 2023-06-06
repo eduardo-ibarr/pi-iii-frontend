@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IUpdateRequester } from '../../../../interfaces/update';
 import { LoadingSpin, openSuccessNotification } from '../../../../components';
-import { handleError, passwordValidator } from '../../../../helpers';
+import {
+	handleError,
+	nameValidator,
+	passwordValidator,
+} from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 import {
 	useShowRequester,
@@ -56,6 +60,17 @@ export const UpdateRequester = () => {
 				<Form.Item
 					rules={[
 						{ required: true, message: 'O nome do requisitante é obrigatório' },
+						{
+							validator: (rule, value, callback) => {
+								if (nameValidator(form.getFieldValue('name'))) {
+									callback();
+								} else {
+									callback(
+										'O nome deve ser completo, contendo apenas letras, sem haver repetições.'
+									);
+								}
+							},
+						},
 					]}
 					style={{ marginBottom: '30px' }}
 					label="Digite o nome do requisitante:"
