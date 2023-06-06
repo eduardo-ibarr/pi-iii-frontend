@@ -12,6 +12,7 @@ import {
 } from '../../../../../components';
 import { useCreateTicket } from '../../../../../hooks/api/tickets/useCreateTicket';
 import useAppContext from '../../../../../hooks/app/useAppContext';
+import { useCreateConversation } from '../../../../../hooks/api/conversations/useCreateConversation';
 
 interface ISelectOption {
 	value: string;
@@ -22,6 +23,11 @@ export const CreateTicket = () => {
 	const [form] = Form.useForm<ICreateTicket>();
 
 	const { userId } = useAppContext();
+
+	const {
+		mutateAsync: createConversation,
+		isLoading: isLoadingCreateConversation,
+	} = useCreateConversation();
 
 	const { data: categories, isLoading: isLoadingCategories } =
 		useListCategories();
@@ -57,13 +63,17 @@ export const CreateTicket = () => {
 		subject,
 	}: ICreateTicket) => {
 		try {
-			await createTicket({
+			const ticket = await createTicket({
 				category_id,
 				content,
 				sector_id,
 				requester_id: userId || '',
 				status: 'not viewed',
 				subject,
+			});
+
+			await createConversation({
+				ticket_id: ticket.id,
 			});
 
 			openSuccessNotification(
@@ -91,7 +101,7 @@ export const CreateTicket = () => {
 					name="category_id"
 					label="Sobre qual categoria você precisa de ajuda?"
 				>
-					<Select style={{ width: 120 }} options={categoriesForSelect} />
+					<Select style={{ width: '300px' }} options={categoriesForSelect} />
 				</Form.Item>
 
 				<Form.Item
@@ -100,7 +110,7 @@ export const CreateTicket = () => {
 					name="sector_id"
 					label="Selecione o seu setor:"
 				>
-					<Select style={{ width: 120 }} options={sectorsForSelect} />
+					<Select style={{ width: '300px' }} options={sectorsForSelect} />
 				</Form.Item>
 
 				<Form.Item
@@ -133,7 +143,7 @@ export const CreateTicket = () => {
 						type="primary"
 						htmlType="submit"
 					>
-						{isLoadingCreation ? (
+						{isLoadingCreation || isLoadingCreateConversation ? (
 							<Spin style={{ color: 'white' }} />
 						) : (
 							'Enviar solicitação'

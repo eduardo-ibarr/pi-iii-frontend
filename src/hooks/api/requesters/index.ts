@@ -3,3 +3,4 @@ export { useDeleteRequester } from './useDeleteRequester';
 export { useListRequesters } from './useListRequesters';
 export { useShowRequester } from './useShowRequester';
 export { useUpdateRequester } from './useUpdateRequester';
+export { useUpdateRequesterPassword } from './useUpdateRequesterPassword';

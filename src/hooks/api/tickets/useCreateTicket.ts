@@ -1,6 +1,15 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ticketsService } from '../../../services/api';
+import { invalidateTickets } from './useListTickets';
+import { invalidateTicketsByRequester } from './useListTicketsByRequester';
 
 export function useCreateTicket() {
-	return useMutation(ticketsService.addTicket);
+	const queryClient = useQueryClient();
+
+	return useMutation(ticketsService.addTicket, {
+		onSuccess: () => {
+			invalidateTickets(queryClient);
+			invalidateTicketsByRequester(queryClient);
+		},
+	});
 }

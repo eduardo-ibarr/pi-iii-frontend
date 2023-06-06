@@ -10,7 +10,7 @@ import {
 	Typography,
 	Spin,
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
 	DesktopOutlined,
@@ -24,7 +24,7 @@ import { ParentPage } from '../../../interfaces/parentPage';
 import { useNavigate } from 'react-router';
 import { useLogoff } from '../../../hooks/api/auth/useLogoff';
 import { openErrorNotification } from '../../../components';
-import { translateErrorMessage } from '../../../helpers/translateErrorMessage';
+import { translate } from '../../../helpers/translate';
 import { AxiosError } from 'axios';
 import { IRequestError } from '../../../interfaces/requestError';
 import useAppContext from '../../../hooks/app/useAppContext';
@@ -33,7 +33,7 @@ import { useTurnAvailability } from '../../../hooks/api/agents/useTurnAvailabili
 
 import { BsFillTicketDetailedFill } from 'react-icons/bs';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -53,6 +53,7 @@ function getItem(
 
 export const PrivateBase = ({ children }: ParentPage) => {
 	const [collapsed, setCollapsed] = useState(false);
+	const [items, setItems] = useState<MenuItem[]>([]);
 	const history = useNavigate();
 
 	const { mutateAsync: logoff, isLoading: isLoadingLogoff } = useLogoff();
@@ -75,13 +76,15 @@ export const PrivateBase = ({ children }: ParentPage) => {
 				await turnAvailability({ email: userEmail || '', available: false });
 			}
 
-			// await logoff();
+			await logoff();
 
 			clearAccessToken();
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				const errorObj: IRequestError = error?.response?.data;
-				openErrorNotification(translateErrorMessage(errorObj.message));
+				openErrorNotification(
+					translate({ message: errorObj.message, type: 'error' })
+				);
 				console.error(errorObj);
 			}
 		}
@@ -106,8 +109,6 @@ export const PrivateBase = ({ children }: ParentPage) => {
 			label: string;
 		};
 
-		console.log(menuItem);
-
 		let path = `/app/${menuItem.label.toLocaleLowerCase()}`;
 
 		if (menuItem.label === 'Tickets') {
@@ -123,29 +124,23 @@ export const PrivateBase = ({ children }: ParentPage) => {
 		history(path);
 	};
 
-	// getItem('User', 'sub1', <UserOutlined />, [
-	// 	getItem('Tom', '3'),
-	// 	getItem('Bill', '4'),
-	// 	getItem('Alex', '5'),
-	// ]),
+	useEffect(() => {
+		if (typeOfUser === 'agent') {
+			setItems(() => [
+				getItem('Agentes', '1', <UserOutlined />),
+				getItem('Categorias', '2', <ToolOutlined />),
+				getItem('Tickets', '3', <BsFillTicketDetailedFill />),
+			]);
+		}
 
-	let items: MenuItem[] = [];
-
-	if (typeOfUser === 'agent') {
-		items = [
-			getItem('Agentes', '1', <UserOutlined />),
-			getItem('Categorias', '2', <ToolOutlined />),
-			getItem('Tickets', '3', <BsFillTicketDetailedFill />),
-		];
-	}
-
-	if (typeOfUser === 'requester') {
-		items = [
-			getItem('Requisitantes', '1', <UserOutlined />),
-			getItem('Setores', '2', <DesktopOutlined />),
-			getItem('Tickets', '3', <BsFillTicketDetailedFill />),
-		];
-	}
+		if (typeOfUser === 'requester') {
+			setItems(() => [
+				getItem('Requisitantes', '1', <UserOutlined />),
+				getItem('Setores', '2', <DesktopOutlined />),
+				getItem('Tickets', '3', <BsFillTicketDetailedFill />),
+			]);
+		}
+	}, [typeOfUser]);
 
 	return (
 		<>
@@ -204,9 +199,6 @@ export const PrivateBase = ({ children }: ParentPage) => {
 						</Breadcrumb>
 						{children}
 					</Content>
-					<Footer style={{ textAlign: 'center' }}>
-						© 2023 Eduardo Ibarr de Paula. Todos os direitos reservados.
-					</Footer>
 				</Layout>
 			</Layout>
 			<Modal

@@ -38,9 +38,9 @@ const useAppContext = () => {
 			handleLogin,
 			handleLogoff,
 			handleSetUserEmail,
-			userId,
 			userEmail,
 			typeOfUser,
+			userId,
 		]
 	);
 

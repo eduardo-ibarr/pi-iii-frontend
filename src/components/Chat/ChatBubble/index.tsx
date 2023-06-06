@@ -1,24 +1,27 @@
 import React from 'react';
 import { List, Typography } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
-import { TUser } from '../../../../../../../../types/TUser';
 import { blue, green } from '@ant-design/colors';
+import moment from 'moment';
+import { TUser } from '../../../types/TUser';
 
 interface IChatBubbleProps {
 	content: string;
 	readStatus: boolean;
 	typeOfUser: TUser;
+	date: Date;
 }
 
-const ChatBubble: React.FC<IChatBubbleProps> = ({
+export const ChatBubble = ({
 	content,
 	typeOfUser,
 	readStatus,
-}) => {
+	date,
+}: IChatBubbleProps) => {
 	const author = typeOfUser === 'requester' ? 'Você' : 'Agente';
 
 	const bubbleStyle: React.CSSProperties = {
-		backgroundColor: typeOfUser === 'agent' ? '#f5f5f5' : '#1976D2',
+		backgroundColor: typeOfUser === 'agent' ? '#f5f5f5' : '#3288df',
 		color: typeOfUser === 'agent' ? '#333333' : 'white',
 		textAlign: typeOfUser === 'agent' ? 'left' : 'right',
 		padding: '5px 15px 5px 15px',
@@ -41,26 +44,26 @@ const ChatBubble: React.FC<IChatBubbleProps> = ({
 					description={content}
 					className={typeOfUser}
 				/>
+
+				<Typography.Text style={{ margin: '0 4.5rem 0 0', fontSize: '12px' }}>
+					{moment(date).format('DD/MM/yyyy hh:mm:ss')}
+				</Typography.Text>
+
 				{typeOfUser === 'requester' && (
-					<Typography.Text style={{ margin: '0 16px 0 16px' }}>
+					<Typography.Text style={{ margin: '0 5px 0 16px', fontSize: '12px' }}>
 						{readStatus ? (
 							<>
 								<CheckOutlined
 									style={{
 										color: green[5],
 										marginRight: '5px',
-										marginTop: '10px',
+										marginTop: '5px',
 									}}
 								/>
 								Lida
 							</>
 						) : (
-							<>
-								<CheckOutlined
-									style={{ marginRight: '5px', marginTop: '10px' }}
-								/>
-								Não lida
-							</>
+							<CheckOutlined style={{ marginRight: '5px', marginTop: '5px' }} />
 						)}
 					</Typography.Text>
 				)}
@@ -68,5 +71,3 @@ const ChatBubble: React.FC<IChatBubbleProps> = ({
 		</List.Item>
 	);
 };
-
-export default ChatBubble;

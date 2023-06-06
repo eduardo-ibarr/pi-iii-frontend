@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ParentPage } from '../../../interfaces/parentPage';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 export const PublicBase = ({ children }: ParentPage) => {
 	return (
@@ -18,9 +18,6 @@ export const PublicBase = ({ children }: ParentPage) => {
 			>
 				{children}
 			</Content>
-			<Footer style={{ textAlign: 'center' }}>
-				© 2023 Eduardo Ibarr de Paula. Todos os direitos reservados.
-			</Footer>
 		</Layout>
 	);
 };

@@ -3,7 +3,7 @@ import React from 'react';
 import { ILogin } from '../../../interfaces/modules';
 import { useLogin } from '../../../hooks/api/auth/useLogin';
 import useAppContext from '../../../hooks/app/useAppContext';
-import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { openSuccessNotification } from '../../../components';
 import Title from 'antd/es/typography/Title';
 import { useTurnAvailability } from '../../../hooks/api/agents/useTurnAvailability';
@@ -12,19 +12,14 @@ import { handleError } from '../../../helpers/handleError';
 export const LoginPage = () => {
 	const [form] = Form.useForm<ILogin>();
 
-	const { handleLogin, typeOfUser, handleSetUserEmail } = useAppContext();
+	const navigate = useNavigate();
 
-	const {
-		mutateAsync: turnAvailability,
-		isLoading: isLoadingUpdate,
-		isSuccess: isSuccessUpdate,
-	} = useTurnAvailability();
+	const { handleLogin, handleSetUserEmail } = useAppContext();
 
-	const {
-		mutateAsync: login,
-		isLoading: isLoadingLogin,
-		isSuccess: isSuccessLogin,
-	} = useLogin();
+	const { mutateAsync: turnAvailability, isLoading: isLoadingUpdate } =
+		useTurnAvailability();
+
+	const { mutateAsync: login, isLoading: isLoadingLogin } = useLogin();
 
 	const onFinish = async ({ email, password, type_of_user }: ILogin) => {
 		try {
@@ -33,6 +28,16 @@ export const LoginPage = () => {
 
 			handleLogin();
 			handleSetUserEmail(email);
+
+			if (type_of_user === 'agent') {
+				navigate('/app/agentes');
+				window.location.reload();
+			}
+
+			if (type_of_user === 'requester') {
+				navigate('/app/requisitantes');
+				window.location.reload();
+			}
 
 			openSuccessNotification('Login realizado com sucesso.');
 		} catch (error) {
@@ -99,18 +104,6 @@ export const LoginPage = () => {
 					</Form.Item>
 				</Form>
 			</Card>
-
-			{isSuccessLogin && isSuccessUpdate ? (
-				typeOfUser === 'agent' ? (
-					<Navigate to="/app/agentes" />
-				) : typeOfUser === 'requester' ? (
-					<Navigate to="/app/requisitantes" />
-				) : (
-					<></>
-				)
-			) : (
-				<></>
-			)}
 		</div>
 	);
 };

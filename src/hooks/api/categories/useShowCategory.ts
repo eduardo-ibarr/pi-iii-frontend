@@ -6,5 +6,5 @@ export function useShowCategory(id: string) {
 }
 
 export async function invalidateCategory(client: QueryClient, id: string) {
-	await client.invalidateQueries(['showCategory', { id }]);
+	await client.invalidateQueries(['showCategory', id]);
 }

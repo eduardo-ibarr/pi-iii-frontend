@@ -1,13 +1,21 @@
 import { Card, Input, Button, Spin, Form, Checkbox } from 'antd';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { IUpdateRequester } from '../../../../interfaces/update';
+import {
+	IUpdateRequester,
+	IUpdateRequesterPassword,
+} from '../../../../interfaces/update';
 import { LoadingSpin, openSuccessNotification } from '../../../../components';
-import { handleError } from '../../../../helpers';
+import {
+	handleError,
+	nameValidator,
+	passwordValidator,
+} from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 import {
 	useShowRequester,
 	useUpdateRequester,
+	useUpdateRequesterPassword,
 } from '../../../../hooks/api/requesters';
 
 export const UpdateRequester = () => {
@@ -18,20 +26,30 @@ export const UpdateRequester = () => {
 	const { data: requester, isLoading: isLoadingShow } = useShowRequester(
 		id as string
 	);
-	const { mutateAsync: updateRequester, isLoading: isLoadingUpdate } =
+	const { mutateAsync: updateRequester, isLoading: isLoadingUpdateRequester } =
 		useUpdateRequester(id as string);
+	const { mutateAsync: updatePassword, isLoading: isLoadingUpdatePassword } =
+		useUpdateRequesterPassword(id as string);
 
-	const [form] = Form.useForm<IUpdateRequester>();
+	const [form] = Form.useForm<IUpdateRequester & IUpdateRequesterPassword>();
 
 	if (isLoadingShow) {
 		return <LoadingSpin />;
 	}
 
-	const onFinish = async ({ name, email, password }: IUpdateRequester) => {
+	const onFinish = async ({
+		email,
+		name,
+		new_password,
+		old_password,
+	}: IUpdateRequester & IUpdateRequesterPassword) => {
 		try {
-			await updateRequester(
-				password ? { email, name, password } : { email, name }
-			);
+			if (wantUpdatePassword) {
+				await updatePassword({ new_password, old_password });
+			}
+
+			await updateRequester({ email, name });
+
 			openSuccessNotification('Requisitante atualizado com sucesso.');
 		} catch (error) {
 			handleError(error);
@@ -56,6 +74,17 @@ export const UpdateRequester = () => {
 				<Form.Item
 					rules={[
 						{ required: true, message: 'O nome do requisitante é obrigatório' },
+						{
+							validator: (rule, value, callback) => {
+								if (nameValidator(form.getFieldValue('name'))) {
+									callback();
+								} else {
+									callback(
+										'O nome deve ser completo, contendo apenas letras, sem haver repetições.'
+									);
+								}
+							},
+						},
 					]}
 					style={{ marginBottom: '30px' }}
 					label="Digite o nome do requisitante:"
@@ -89,10 +118,34 @@ export const UpdateRequester = () => {
 					rules={[
 						{
 							required: wantUpdatePassword,
-							message: 'A nova senha é obrigatória',
+							message: 'A senha atual é obrigatória',
 						},
 					]}
-					name="password"
+					name="old_password"
+					label="Informe a senha atual:"
+				>
+					<Input.Password disabled={!wantUpdatePassword} />
+				</Form.Item>
+
+				<Form.Item
+					rules={[
+						{
+							required: wantUpdatePassword,
+							message: 'A nova senha é obrigatória',
+						},
+						{
+							validator: (rule, value, callback) => {
+								if (wantUpdatePassword && !passwordValidator(value)) {
+									callback(
+										'A nova senha deve ter no mínimo 8 caracteres, contendo letras e números.'
+									);
+								} else {
+									callback();
+								}
+							},
+						},
+					]}
+					name="new_password"
 					label="Informe a nova senha:"
 				>
 					<Input.Password disabled={!wantUpdatePassword} />
@@ -106,7 +159,7 @@ export const UpdateRequester = () => {
 						},
 						{
 							validator: (rule, value, callback) => {
-								if (value === form.getFieldValue('password')) {
+								if (value === form.getFieldValue('new_password')) {
 									callback();
 								} else {
 									callback(
@@ -124,7 +177,7 @@ export const UpdateRequester = () => {
 
 				<Form.Item>
 					<Button style={{ width: '30%' }} type="primary" htmlType="submit">
-						{isLoadingUpdate ? (
+						{isLoadingUpdateRequester || isLoadingUpdatePassword ? (
 							<Spin style={{ color: 'white' }} />
 						) : (
 							'Atualizar'

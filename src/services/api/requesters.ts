@@ -1,5 +1,8 @@
 import { ICreateRequester } from '../../interfaces/create';
-import { IUpdateRequester } from '../../interfaces/update';
+import {
+	IUpdateRequester,
+	IUpdateRequesterPassword,
+} from '../../interfaces/update';
 import { IRequester } from '../../interfaces/modules';
 
 import client from './instance';
@@ -29,6 +32,13 @@ export const updateRequester = async (
 	return data;
 };
 
+export const updateRequesterPassword = async (
+	values: IUpdateRequesterPassword,
+	id: string
+): Promise<void> => {
+	await client.put(`/requesters/${id}/password`, values);
+};
+
 export const deleteRequester = async (id: string): Promise<void> => {
-	await client.delete<IRequester>(`/requesters/${id}`);
+	await client.delete(`/requesters/${id}`);
 };

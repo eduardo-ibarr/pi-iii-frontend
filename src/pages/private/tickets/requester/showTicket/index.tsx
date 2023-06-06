@@ -1,20 +1,20 @@
-import { Button, Card, Descriptions, Tag } from 'antd';
-import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { Card, Descriptions, Tag } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import { useShowTicket } from '../../../../../hooks/api/tickets/useShowTicket';
-import { LoadingSpin } from '../../../../../components';
-import { translateStatusMessage } from '../../../../../helpers/translateStatusMessage';
-import ChatInterface from './components/Chat';
+import { LoadingSpin, ChatInterface } from '../../../../../components';
+import { translate } from '../../../../../helpers/translate';
+import { TagColorsByStatus } from '../../../../../constants/enums/TagsColorsByStatus';
 
 export const ShowTicketsByRequesterSide = () => {
 	const { id } = useParams();
 
-	const { data: ticket, isLoading } = useShowTicket(id as string);
+	const { data: ticket, isLoading: isLoadingTicket } = useShowTicket(
+		id as string
+	);
 
-	if (isLoading) {
+	if (isLoadingTicket) {
 		return <LoadingSpin />;
 	}
 
@@ -23,11 +23,12 @@ export const ShowTicketsByRequesterSide = () => {
 	if (ticket) {
 		ticketInfos = [
 			['Assunto', <b key={ticket.id}>{ticket.subject}</b>],
-			['Conteudo', ticket.content],
+			['Conteúdo', ticket.content],
+			['Requisitante', ticket.requester_name],
 			[
 				'Status',
-				<Tag key={ticket.id} color="default">
-					{translateStatusMessage(ticket.status)}
+				<Tag key={ticket.id} color={TagColorsByStatus[ticket.status]}>
+					{translate({ message: ticket.status, type: 'status' })}
 				</Tag>,
 			],
 			['Criado em', new Date(ticket.created_at).toLocaleString('pt-BR')],
@@ -36,7 +37,7 @@ export const ShowTicketsByRequesterSide = () => {
 	}
 
 	return (
-		<>
+		<div style={{ display: 'flex', width: '100%', gap: '1rem' }}>
 			{/* <div style={{ textAlign: 'right', marginRight: '10px' }}>
 				<Link to={`/app/agentes/${ticket?.id}/atualizar`}>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
@@ -44,10 +45,9 @@ export const ShowTicketsByRequesterSide = () => {
 					</Button>
 				</Link>
 			</div> */}
-
 			<Card>
 				<Title level={3} style={{ marginBottom: '20px' }}>
-					Informações do Agente
+					Informações do Ticket
 				</Title>
 				<Descriptions column={1}>
 					{ticketInfos.map(([label, data], i) => (
@@ -56,9 +56,12 @@ export const ShowTicketsByRequesterSide = () => {
 						</Descriptions.Item>
 					))}
 				</Descriptions>
-
-				<ChatInterface />
 			</Card>
-		</>
+
+			<ChatInterface
+				disabled={ticket?.status === 'cancelled'}
+				ticketId={ticket?.id || ''}
+			/>
+		</div>
 	);
 };

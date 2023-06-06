@@ -34,6 +34,8 @@ import {
 import { CreateTicket } from '../../pages/private/tickets/requester/createTicket';
 import ListTicketsByRequesterSide from '../../pages/private/tickets/requester/listTickets';
 import { ShowTicketsByRequesterSide } from '../../pages/private/tickets/requester/showTicket';
+import ListTicketsByAgentSide from '../../pages/private/tickets/agent/listTickets';
+import { ShowTicketsByAgentSide } from '../../pages/private/tickets/agent/showTicket';
 
 export const PrivateRoutes = () => {
 	const { isLoggedIn, typeOfUser } = useAppContext();
@@ -61,6 +63,12 @@ export const PrivateRoutes = () => {
 					<Route
 						path="/categorias/:id/atualizar"
 						element={<UpdateCategory />}
+					/>
+
+					<Route path="/agentes/tickets" element={<ListTicketsByAgentSide />} />
+					<Route
+						path="/agentes/tickets/:id"
+						element={<ShowTicketsByAgentSide />}
 					/>
 				</Routes>
 			</PrivateBase>
