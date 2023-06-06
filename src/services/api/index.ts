@@ -1,5 +1,4 @@
 export * as authService from './auth';
-export * as agentTicketHistoriesService from './agent-ticket-histories';
 export * as agentsService from './agents';
 export * as categoriesService from './categories';
 export * as conversationsService from './conversations';
