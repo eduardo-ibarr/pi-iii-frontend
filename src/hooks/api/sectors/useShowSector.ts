@@ -6,5 +6,5 @@ export function useShowSector(id: string) {
 }
 
 export async function invalidateSector(client: QueryClient, id: string) {
-	await client.invalidateQueries(['showSector', { id }]);
+	await client.invalidateQueries(['showSector', id]);
 }

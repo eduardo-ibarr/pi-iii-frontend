@@ -6,5 +6,5 @@ export function useShowRequester(id: string) {
 }
 
 export async function invalidateRequester(client: QueryClient, id: string) {
-	await client.invalidateQueries(['showRequester', { id }]);
+	await client.invalidateQueries(['showRequester', id]);
 }

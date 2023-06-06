@@ -101,7 +101,7 @@ export const CreateTicket = () => {
 					name="category_id"
 					label="Sobre qual categoria você precisa de ajuda?"
 				>
-					<Select style={{ width: 120 }} options={categoriesForSelect} />
+					<Select style={{ width: '300px' }} options={categoriesForSelect} />
 				</Form.Item>
 
 				<Form.Item
@@ -110,7 +110,7 @@ export const CreateTicket = () => {
 					name="sector_id"
 					label="Selecione o seu setor:"
 				>
-					<Select style={{ width: 120 }} options={sectorsForSelect} />
+					<Select style={{ width: '300px' }} options={sectorsForSelect} />
 				</Form.Item>
 
 				<Form.Item

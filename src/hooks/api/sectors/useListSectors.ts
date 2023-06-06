@@ -6,5 +6,5 @@ export function useListSectors() {
 }
 
 export async function invalidateSectors(client: QueryClient) {
-	await client.invalidateQueries(['listSectors']);
+	await client.invalidateQueries('listSectors');
 }

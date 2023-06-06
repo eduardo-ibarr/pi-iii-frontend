@@ -31,10 +31,12 @@ export const LoginPage = () => {
 
 			if (type_of_user === 'agent') {
 				navigate('/app/agentes');
+				window.location.reload();
 			}
 
 			if (type_of_user === 'requester') {
 				navigate('/app/requisitantes');
+				window.location.reload();
 			}
 
 			openSuccessNotification('Login realizado com sucesso.');

@@ -1,9 +1,9 @@
 import React from 'react';
 import { List, Typography } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
-import { TUser } from '../../../../../../../../types/TUser';
 import { blue, green } from '@ant-design/colors';
 import moment from 'moment';
+import { TUser } from '../../../types/TUser';
 
 interface IChatBubbleProps {
 	content: string;
