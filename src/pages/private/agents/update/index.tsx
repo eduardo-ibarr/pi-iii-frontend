@@ -1,8 +1,15 @@
 import { Card, Input, Switch, Button, Spin, Form, Checkbox } from 'antd';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useUpdateAgent, useShowAgent } from '../../../../hooks/api/agents';
-import { IUpdateAgent } from '../../../../interfaces/update';
+import {
+	useUpdateAgent,
+	useShowAgent,
+	useUpdateAgentPassword,
+} from '../../../../hooks/api/agents';
+import {
+	IUpdateAgent,
+	IUpdateAgentPassword,
+} from '../../../../interfaces/update';
 import { LoadingSpin, openSuccessNotification } from '../../../../components';
 import {
 	handleError,
@@ -15,12 +22,14 @@ export const UpdateAgent = () => {
 	const { id } = useParams();
 
 	const { data: agent, isLoading: isLoadingShow } = useShowAgent(id as string);
-	const { mutateAsync: updateAgent, isLoading: isLoadingUpdate } =
+	const { mutateAsync: updateAgent, isLoading: isLoadingUpdateAgent } =
 		useUpdateAgent(id as string);
+	const { mutateAsync: updatePassword, isLoading: isLoadingUpdatePassword } =
+		useUpdateAgentPassword(id as string);
 
 	const [wantUpdatePassword, setWantUpdatePassword] = useState(false);
 
-	const [form] = Form.useForm<IUpdateAgent>();
+	const [form] = Form.useForm<IUpdateAgent & IUpdateAgentPassword>();
 
 	if (isLoadingShow) {
 		return <LoadingSpin />;
@@ -30,14 +39,15 @@ export const UpdateAgent = () => {
 		available,
 		email,
 		name,
-		password,
-	}: IUpdateAgent) => {
+		new_password,
+		old_password,
+	}: IUpdateAgent & IUpdateAgentPassword) => {
 		try {
-			await updateAgent(
-				password
-					? { available, email, name, password: password }
-					: { available, email, name }
-			);
+			if (wantUpdatePassword) {
+				await updatePassword({ new_password, old_password });
+			}
+
+			await updateAgent({ available, email, name });
 
 			openSuccessNotification('Agente atualizado com sucesso.');
 		} catch (error) {
@@ -123,21 +133,33 @@ export const UpdateAgent = () => {
 					rules={[
 						{
 							required: wantUpdatePassword,
+							message: 'A senha atual é obrigatória',
+						},
+					]}
+					name="old_password"
+					label="Informe a senha atual:"
+				>
+					<Input.Password disabled={!wantUpdatePassword} />
+				</Form.Item>
+				<Form.Item
+					rules={[
+						{
+							required: wantUpdatePassword,
 							message: 'A nova senha é obrigatória',
 						},
 						{
 							validator: (rule, value, callback) => {
-								if (passwordValidator(form.getFieldValue('password'))) {
-									callback();
-								} else {
+								if (wantUpdatePassword && !passwordValidator(value)) {
 									callback(
 										'A nova senha deve ter no mínimo 8 caracteres, contendo letras e números.'
 									);
+								} else {
+									callback();
 								}
 							},
 						},
 					]}
-					name="password"
+					name="new_password"
 					label="Informe a nova senha:"
 				>
 					<Input.Password disabled={!wantUpdatePassword} />
@@ -151,7 +173,7 @@ export const UpdateAgent = () => {
 						},
 						{
 							validator: (rule, value, callback) => {
-								if (value === form.getFieldValue('password')) {
+								if (value === form.getFieldValue('new_password')) {
 									callback();
 								} else {
 									callback(
@@ -173,7 +195,7 @@ export const UpdateAgent = () => {
 						type="primary"
 						htmlType="submit"
 					>
-						{isLoadingUpdate ? (
+						{isLoadingUpdateAgent || isLoadingUpdatePassword ? (
 							<Spin style={{ color: 'white' }} />
 						) : (
 							'Atualizar'

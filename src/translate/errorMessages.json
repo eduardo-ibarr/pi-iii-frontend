@@ -21,5 +21,6 @@
 	"Already exists a sector with this name.": "Já existe um setor com esse nome.",
 	"Sector not found.": "Setor não encontrado.",
 	"Ticket not found.": "Ticket não encontrado.",
-	"Validation failed": "Dados inválidos."
+	"Validation failed": "Dados inválidos.",
+	"Password received not equals to the existing password.": "A senha recebida não é igual à senha existente."
 }

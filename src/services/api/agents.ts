@@ -1,5 +1,5 @@
 import { ICreateAgent } from '../../interfaces/create';
-import { IUpdateAgent } from '../../interfaces/update';
+import { IUpdateAgent, IUpdateAgentPassword } from '../../interfaces/update';
 import { IAgent } from '../../interfaces/modules';
 
 import client from './instance';
@@ -25,6 +25,13 @@ export const updateAgent = async (
 ): Promise<IAgent> => {
 	const { data } = await client.put<IAgent>(`/agents/${id}`, values);
 	return data;
+};
+
+export const updateAgentPassword = async (
+	values: IUpdateAgentPassword,
+	id: string
+): Promise<void> => {
+	await client.put<IAgent>(`/agents/${id}/password`, values);
 };
 
 export const deleteAgent = async (id: string): Promise<void> => {
