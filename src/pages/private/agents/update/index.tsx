@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useUpdateAgent, useShowAgent } from '../../../../hooks/api/agents';
 import { IUpdateAgent } from '../../../../interfaces/update';
 import { LoadingSpin, openSuccessNotification } from '../../../../components';
-import { handleError } from '../../../../helpers';
+import { handleError, passwordValidator } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 
 export const UpdateAgent = () => {
@@ -109,6 +109,17 @@ export const UpdateAgent = () => {
 						{
 							required: wantUpdatePassword,
 							message: 'A nova senha é obrigatória',
+						},
+						{
+							validator: (rule, value, callback) => {
+								if (passwordValidator(form.getFieldValue('password'))) {
+									callback();
+								} else {
+									callback(
+										'A nova senha deve ter no mínimo 8 caracteres, contendo letras e números.'
+									);
+								}
+							},
 						},
 					]}
 					name="password"

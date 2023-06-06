@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IUpdateRequester } from '../../../../interfaces/update';
 import { LoadingSpin, openSuccessNotification } from '../../../../components';
-import { handleError } from '../../../../helpers';
+import { handleError, passwordValidator } from '../../../../helpers';
 import Title from 'antd/es/typography/Title';
 import {
 	useShowRequester,
@@ -90,6 +90,17 @@ export const UpdateRequester = () => {
 						{
 							required: wantUpdatePassword,
 							message: 'A nova senha é obrigatória',
+						},
+						{
+							validator: (rule, value, callback) => {
+								if (passwordValidator(form.getFieldValue('password'))) {
+									callback();
+								} else {
+									callback(
+										'A nova senha deve ter no mínimo 8 caracteres, contendo letras e números.'
+									);
+								}
+							},
 						},
 					]}
 					name="password"
