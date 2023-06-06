@@ -51,7 +51,7 @@ export const CreateRequester = () => {
 						},
 					]}
 					style={{ marginBottom: '30px' }}
-					label="Digite o nome da categoria:"
+					label="Digite o nome do requisitante:"
 					name="name"
 				>
 					<Input />

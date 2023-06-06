@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { requestersService } from '../../../services/api';
 import { IUpdateRequester } from '../../../interfaces/update';
-import { invalidateAgent } from '../agents/useShowAgent';
-import { invalidateAgents } from '../agents/useListAgents';
+import { invalidateRequester } from '../requesters/useShowRequester';
+import { invalidateRequesters } from '../requesters/useListRequesters';
 
 export function useUpdateRequester(id: string) {
 	const queryClient = useQueryClient();
@@ -11,8 +11,8 @@ export function useUpdateRequester(id: string) {
 		(values: IUpdateRequester) => requestersService.updateRequester(values, id),
 		{
 			onSuccess: () => {
-				invalidateAgent(queryClient, id);
-				invalidateAgents(queryClient);
+				invalidateRequester(queryClient, id);
+				invalidateRequesters(queryClient);
 			},
 		}
 	);

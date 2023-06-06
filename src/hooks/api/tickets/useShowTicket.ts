@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { requestersService, ticketsService } from '../../../services/api';
 
 export function useShowTicket(id: string) {
@@ -14,4 +14,8 @@ export function useShowTicket(id: string) {
 			requester_name: requesterOfTicket.name,
 		};
 	});
+}
+
+export async function invalidateTicket(client: QueryClient, id: string) {
+	await client.invalidateQueries(['showTicket', id]);
 }

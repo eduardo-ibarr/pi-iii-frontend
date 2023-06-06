@@ -6,5 +6,5 @@ export function useListRequesters() {
 }
 
 export async function invalidateRequesters(client: QueryClient) {
-	await client.invalidateQueries(['listRequesters']);
+	await client.invalidateQueries('listRequesters');
 }
