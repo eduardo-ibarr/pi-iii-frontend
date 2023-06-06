@@ -141,6 +141,7 @@ export const UpdateAgent = () => {
 				>
 					<Input.Password disabled={!wantUpdatePassword} />
 				</Form.Item>
+
 				<Form.Item
 					rules={[
 						{

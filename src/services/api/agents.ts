@@ -31,7 +31,7 @@ export const updateAgentPassword = async (
 	values: IUpdateAgentPassword,
 	id: string
 ): Promise<void> => {
-	await client.put<IAgent>(`/agents/${id}/password`, values);
+	await client.put(`/agents/${id}/password`, values);
 };
 
 export const deleteAgent = async (id: string): Promise<void> => {
