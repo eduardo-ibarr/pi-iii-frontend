@@ -6,5 +6,5 @@ export function useListCategories() {
 }
 
 export async function invalidateCategories(client: QueryClient) {
-	await client.invalidateQueries(['listCategories']);
+	await client.invalidateQueries('listCategories');
 }

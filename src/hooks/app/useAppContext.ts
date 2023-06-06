@@ -32,6 +32,7 @@ const useAppContext = () => {
 			userId,
 			userEmail,
 			typeOfUser,
+			userId,
 		}),
 		[
 			isLoggedIn,
@@ -41,6 +42,7 @@ const useAppContext = () => {
 			userId,
 			userEmail,
 			typeOfUser,
+			userId,
 		]
 	);
 

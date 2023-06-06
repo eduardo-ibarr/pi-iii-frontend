@@ -1,6 +1,17 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { messagesService } from '../../../services/api';
+import { invalidateMessages } from './useListMessages';
+import { invalidateMessage } from './useShowMessage';
+import { invalidateMessagesByTicket } from './useListMessagesByTicket';
 
 export function useCreateMessage() {
-	return useMutation(messagesService.addMessage);
+	const queryClient = useQueryClient();
+
+	return useMutation(messagesService.addMessage, {
+		onSuccess: () => {
+			invalidateMessages(queryClient);
+			invalidateMessage(queryClient);
+			invalidateMessagesByTicket(queryClient);
+		},
+	});
 }

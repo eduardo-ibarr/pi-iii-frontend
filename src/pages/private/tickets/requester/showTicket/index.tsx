@@ -1,13 +1,11 @@
-import { Button, Card, Descriptions, Tag } from 'antd';
-import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { Card, Descriptions, Tag } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import { useShowTicket } from '../../../../../hooks/api/tickets/useShowTicket';
 import { LoadingSpin } from '../../../../../components';
-import { translateStatusMessage } from '../../../../../helpers/translateStatusMessage';
-import ChatInterface from './components/Chat';
+import { translate } from '../../../../../helpers/translate';
+import { ChatInterface } from './components/Chat';
 
 export const ShowTicketsByRequesterSide = () => {
 	const { id } = useParams();
@@ -27,7 +25,7 @@ export const ShowTicketsByRequesterSide = () => {
 			[
 				'Status',
 				<Tag key={ticket.id} color="default">
-					{translateStatusMessage(ticket.status)}
+					{translate({ message: ticket.status, type: 'status' })}
 				</Tag>,
 			],
 			['Criado em', new Date(ticket.created_at).toLocaleString('pt-BR')],
@@ -36,7 +34,7 @@ export const ShowTicketsByRequesterSide = () => {
 	}
 
 	return (
-		<>
+		<div style={{ display: 'flex', width: '100%', gap: '1rem' }}>
 			{/* <div style={{ textAlign: 'right', marginRight: '10px' }}>
 				<Link to={`/app/agentes/${ticket?.id}/atualizar`}>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
@@ -47,7 +45,7 @@ export const ShowTicketsByRequesterSide = () => {
 
 			<Card>
 				<Title level={3} style={{ marginBottom: '20px' }}>
-					Informações do Agente
+					Informações do Ticket
 				</Title>
 				<Descriptions column={1}>
 					{ticketInfos.map(([label, data], i) => (
@@ -56,9 +54,9 @@ export const ShowTicketsByRequesterSide = () => {
 						</Descriptions.Item>
 					))}
 				</Descriptions>
-
-				<ChatInterface />
 			</Card>
-		</>
+
+			<ChatInterface ticketId={ticket?.id || ''} />
+		</div>
 	);
 };

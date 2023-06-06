@@ -7,6 +7,7 @@ interface IAppContext {
 	isLoggedIn: boolean;
 	userId: string | null;
 	userEmail: string | null;
+	userId: string | null;
 	typeOfUser: TUser | string;
 	setLoggedIn: (isLoggedIn: boolean) => void;
 	setUserEmail: (email: string) => void;

@@ -1,3 +1,4 @@
+import { getAccessToken } from '../../helpers';
 import { ILogin } from '../../interfaces/modules';
 import { IAuth } from '../../interfaces/modules/IAuth';
 
@@ -9,5 +10,7 @@ export const login = async (values: ILogin): Promise<IAuth> => {
 };
 
 export const logoff = async (): Promise<void> => {
-	await client.post('/api/logoff');
+	await client.post('/api/logoff', {
+		token: getAccessToken()?.token,
+	});
 };

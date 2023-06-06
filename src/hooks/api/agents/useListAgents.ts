@@ -6,5 +6,5 @@ export function useListAgents() {
 }
 
 export async function invalidateAgents(client: QueryClient) {
-	await client.invalidateQueries(['listAgents']);
+	await client.invalidateQueries('listAgents');
 }

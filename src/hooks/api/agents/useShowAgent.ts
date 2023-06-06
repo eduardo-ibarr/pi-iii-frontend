@@ -6,5 +6,5 @@ export function useShowAgent(id: string) {
 }
 
 export async function invalidateAgent(client: QueryClient, id: string) {
-	await client.invalidateQueries(['showAgent', { id }]);
+	await client.invalidateQueries(['showAgent', id]);
 }
