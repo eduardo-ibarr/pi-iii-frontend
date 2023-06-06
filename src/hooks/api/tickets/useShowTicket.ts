@@ -1,5 +1,10 @@
 import { QueryClient, useQuery } from 'react-query';
-import { requestersService, ticketsService } from '../../../services/api';
+import {
+	categoriesService,
+	requestersService,
+	sectorsService,
+	ticketsService,
+} from '../../../services/api';
 
 export function useShowTicket(id: string) {
 	return useQuery('showTicket', async () => {
@@ -9,9 +14,17 @@ export function useShowTicket(id: string) {
 			ticket.requester_id
 		);
 
+		const categoryOfTicket = await categoriesService.showCategory(
+			ticket.category_id
+		);
+
+		const sectorOfTicket = await sectorsService.showSector(ticket.sector_id);
+
 		return {
 			...ticket,
 			requester_name: requesterOfTicket.name,
+			sector_name: sectorOfTicket.name,
+			category_name: categoryOfTicket.name,
 		};
 	});
 }
