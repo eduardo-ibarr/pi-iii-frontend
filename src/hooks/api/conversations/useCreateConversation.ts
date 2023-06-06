@@ -1,6 +1,13 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { conversationsService } from '../../../services/api';
+import { invalidateConversations } from './useListConversations';
 
 export function useCreateConversation() {
-	return useMutation(conversationsService.addConversation);
+	const queryClient = useQueryClient();
+
+	return useMutation(conversationsService.addConversation, {
+		onSuccess: () => {
+			invalidateConversations(queryClient);
+		},
+	});
 }
