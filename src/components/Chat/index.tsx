@@ -2,13 +2,18 @@ import React from 'react';
 import { Input, Button, Card, Form, Spin } from 'antd';
 
 import Title from 'antd/es/typography/Title';
-import { ChatBubble } from './ChatBubble';
+import {
+	ChatBubbleByAdminSide,
+	ChatBubbleByAgentSide,
+	ChatBubbleByRequesterSide,
+} from './ChatBubble';
 import { handleError } from '../../helpers';
 import { useShowConversationByTicket } from '../../hooks/api/conversations/useShowConversationByTicket';
 import { useCreateMessage } from '../../hooks/api/messages/useCreateMessage';
 import { useListMessagesByTicket } from '../../hooks/api/messages/useListMessagesByTicket';
 import { ICreateMessage } from '../../interfaces/create';
 import { LoadingSpin } from '../LoadingSpin';
+import useAppContext from '../../hooks/app/useAppContext';
 
 interface IChatInterfaceProps {
 	ticketId: string;
@@ -17,6 +22,8 @@ interface IChatInterfaceProps {
 
 export const ChatInterface = ({ ticketId, disabled }: IChatInterfaceProps) => {
 	const [form] = Form.useForm<ICreateMessage>();
+
+	const { typeOfUser } = useAppContext();
 
 	const { data: conversation, isLoading: isLoadingShow } =
 		useShowConversationByTicket(ticketId);
@@ -43,7 +50,7 @@ export const ChatInterface = ({ ticketId, disabled }: IChatInterfaceProps) => {
 				content,
 				conversation_id: conversation?.id || '',
 				read_status: false,
-				sender: 'requester',
+				sender: typeOfUser,
 				ticket_id: ticketId,
 			});
 		} catch (error) {
@@ -57,22 +64,48 @@ export const ChatInterface = ({ ticketId, disabled }: IChatInterfaceProps) => {
 				maxWidth: '500px',
 			}}
 		>
-			<Title level={3}>Bate papo</Title>
+			<Title level={4}>Bate papo</Title>
 			<Card
 				style={{
 					height: '400px',
 					overflow: 'auto',
+					boxShadow: 'inset 0 0 2px rgba(0, 0, 0, 0.1)',
 				}}
 			>
-				{messages.map((message) => (
-					<ChatBubble
-						key={message.id}
-						date={message.created_at}
-						content={message.content}
-						typeOfUser={message.sender}
-						readStatus={message.read_status}
-					/>
-				))}
+				{typeOfUser === 'agent' &&
+					messages.map((message) => (
+						<ChatBubbleByAgentSide
+							key={message.id}
+							messageId={message.id}
+							date={message.created_at}
+							content={message.content}
+							sender={message.sender}
+							readStatus={message.read_status}
+						/>
+					))}
+
+				{typeOfUser === 'requester' &&
+					messages.map((message) => (
+						<ChatBubbleByRequesterSide
+							key={message.id}
+							messageId={message.id}
+							date={message.created_at}
+							content={message.content}
+							sender={message.sender}
+							readStatus={message.read_status}
+						/>
+					))}
+
+				{typeOfUser === 'admin' &&
+					messages.map((message) => (
+						<ChatBubbleByAdminSide
+							key={message.id}
+							date={message.created_at}
+							content={message.content}
+							sender={message.sender}
+							readStatus={message.read_status}
+						/>
+					))}
 			</Card>
 
 			<Form

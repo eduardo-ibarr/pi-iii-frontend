@@ -33,7 +33,7 @@ export const ListRequesters = () => {
 	const { mutateAsync: deleteRequester } = useDeleteRequester();
 
 	const handleShowMoreInfo = (id: string) => {
-		history(`/app/requisitantes/${id}`);
+		history(`/app/admin/requisitantes/${id}`);
 	};
 
 	const showModal = (id: string) => {
@@ -118,7 +118,7 @@ export const ListRequesters = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to="/app/requisitantes/novo">
+				<Link to="/app/admin/requisitantes/novo">
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Criar novo requisitante
 					</Button>

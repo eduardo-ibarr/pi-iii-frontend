@@ -28,7 +28,7 @@ export const ShowCategory = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to={`/app/categorias/${category?.id}/atualizar`}>
+				<Link to={`/app/admin/categorias/${category?.id}/atualizar`}>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Atualizar dados
 					</Button>
