@@ -4,7 +4,7 @@ import { useListTickets } from '../../../../../hooks/api/tickets/useListTickets'
 import { LoadingSpin } from '../../../../../components';
 import { translate } from '../../../../../helpers/';
 import { useNavigate } from 'react-router';
-import { TagColorsByStatus } from '../../../../../constants/enums/TagsColorsByStatus';
+import { tagColorsByStatus } from '../../../../../constants/tagsColorsByStatus';
 
 export default function ListTicketsByAgentSide() {
 	const history = useNavigate();
@@ -36,14 +36,14 @@ export default function ListTicketsByAgentSide() {
 					>
 						Novo!
 					</Typography>
-					<Tag color={TagColorsByStatus[ticket.status]}>
+					<Tag color={tagColorsByStatus[ticket.status]}>
 						{translate({ message: ticket.status, type: 'status' })}
 					</Tag>
 					<a onClick={() => handleShowTicket(ticket.id)}>{ticket.subject}</a>
 				</div>
 			) : (
 				<div key={i}>
-					<Tag color={TagColorsByStatus[ticket.status]}>
+					<Tag color={tagColorsByStatus[ticket.status]}>
 						{translate({ message: ticket.status, type: 'status' })}
 					</Tag>
 					<a onClick={() => handleShowTicket(ticket.id)}>{ticket.subject}</a>

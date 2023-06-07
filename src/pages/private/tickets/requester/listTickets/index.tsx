@@ -6,7 +6,7 @@ import { LoadingSpin } from '../../../../../components';
 import { translate } from '../../../../../helpers/';
 import { useNavigate } from 'react-router';
 import { useQueryClient } from 'react-query';
-import { TagColorsByStatus } from '../../../../../constants/enums/TagsColorsByStatus';
+import { tagColorsByStatus } from '../../../../../constants/tagsColorsByStatus';
 import { Link } from 'react-router-dom';
 
 export default function ListTicketsByRequesterSide() {
@@ -28,7 +28,7 @@ export default function ListTicketsByRequesterSide() {
 
 	const data = tickets?.map((ticket, i) => (
 		<div key={i}>
-			<Tag color={TagColorsByStatus[ticket.status]}>
+			<Tag color={tagColorsByStatus[ticket.status]}>
 				{translate({ message: ticket.status, type: 'status' })}
 			</Tag>
 			<a onClick={() => handleShowTicket(ticket.id)}>{ticket.subject}</a>

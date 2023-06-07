@@ -5,7 +5,7 @@ import Title from 'antd/es/typography/Title';
 import { useShowTicket } from '../../../../../hooks/api/tickets/useShowTicket';
 import { LoadingSpin, ChatInterface } from '../../../../../components';
 import { translate } from '../../../../../helpers/translate';
-import { TagColorsByStatus } from '../../../../../constants/enums/TagsColorsByStatus';
+import { tagColorsByStatus } from '../../../../../constants/tagsColorsByStatus';
 
 export const ShowTicketsByAdminSide = () => {
 	const { id } = useParams();
@@ -30,7 +30,7 @@ export const ShowTicketsByAdminSide = () => {
 			['Setor da empresa', ticket.sector_name],
 			[
 				'Status',
-				<Tag key={ticket.id} color={TagColorsByStatus[ticket.status]}>
+				<Tag key={ticket.id} color={tagColorsByStatus[ticket.status]}>
 					{translate({ message: ticket.status, type: 'status' })}
 				</Tag>,
 			],
