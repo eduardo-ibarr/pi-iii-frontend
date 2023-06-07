@@ -1,10 +1,12 @@
 import { QueryClient, useQuery } from 'react-query';
 import {
+	agentsService,
 	categoriesService,
 	requestersService,
 	sectorsService,
 	ticketsService,
 } from '../../../services/api';
+import { IAgent } from '../../../interfaces/modules';
 
 export function useShowTicket(id: string) {
 	return useQuery('showTicket', async () => {
@@ -20,11 +22,20 @@ export function useShowTicket(id: string) {
 
 		const sectorOfTicket = await sectorsService.showSector(ticket.sector_id);
 
+		let agentOfTicket = {} as IAgent;
+
+		if (ticket.agent_id) {
+			agentOfTicket = await agentsService.showAgent(ticket.agent_id);
+		}
+
 		return {
 			...ticket,
 			requester_name: requesterOfTicket.name,
+			requester_email: requesterOfTicket.email,
 			sector_name: sectorOfTicket.name,
 			category_name: categoryOfTicket.name,
+			agent_email: agentOfTicket.email,
+			agent_name: agentOfTicket.name,
 		};
 	});
 }

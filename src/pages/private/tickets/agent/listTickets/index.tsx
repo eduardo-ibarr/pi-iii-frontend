@@ -4,12 +4,9 @@ import { useListTickets } from '../../../../../hooks/api/tickets/useListTickets'
 import { LoadingSpin } from '../../../../../components';
 import { translate } from '../../../../../helpers/';
 import { useNavigate } from 'react-router';
-import { useQueryClient } from 'react-query';
 import { TagColorsByStatus } from '../../../../../constants/enums/TagsColorsByStatus';
 
 export default function ListTicketsByAgentSide() {
-	const queryClient = useQueryClient();
-
 	const history = useNavigate();
 
 	const { data: tickets, isLoading } = useListTickets();
@@ -19,7 +16,6 @@ export default function ListTicketsByAgentSide() {
 	}
 
 	const handleShowTicket = (id: string) => {
-		queryClient.invalidateQueries();
 		history(`/app/agentes/tickets/${id}`);
 	};
 

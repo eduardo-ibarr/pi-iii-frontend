@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import useAppContext from '../../hooks/app/useAppContext';
@@ -36,6 +37,8 @@ import ListTicketsByRequesterSide from '../../pages/private/tickets/requester/li
 import { ShowTicketsByRequesterSide } from '../../pages/private/tickets/requester/showTicket';
 import ListTicketsByAgentSide from '../../pages/private/tickets/agent/listTickets';
 import { ShowTicketsByAgentSide } from '../../pages/private/tickets/agent/showTicket';
+import ListTicketsByAdminSide from '../../pages/private/tickets/admin/listTickets';
+import { ShowTicketsByAdminSide } from '../../pages/private/tickets/admin/showTicket';
 
 export const PrivateRoutes = () => {
 	const { isLoggedIn, typeOfUser } = useAppContext();
@@ -52,18 +55,8 @@ export const PrivateRoutes = () => {
 		return (
 			<PrivateBase>
 				<Routes>
-					<Route path="/agentes" element={<ListAgents />} />
-					<Route path="/agentes/novo" element={<CreateAgent />} />
 					<Route path="/agentes/:id" element={<ShowAgent />} />
 					<Route path="/agentes/:id/atualizar" element={<UpdateAgent />} />
-
-					<Route path="/categorias" element={<ListCategories />} />
-					<Route path="/categorias/nova" element={<CreateCategory />} />
-					<Route path="/categorias/:id" element={<ShowCategory />} />
-					<Route
-						path="/categorias/:id/atualizar"
-						element={<UpdateCategory />}
-					/>
 
 					<Route path="/agentes/tickets" element={<ListTicketsByAgentSide />} />
 					<Route
@@ -79,18 +72,11 @@ export const PrivateRoutes = () => {
 		return (
 			<PrivateBase>
 				<Routes>
-					<Route path="/requisitantes" element={<ListRequesters />} />
-					<Route path="/requisitantes/novo" element={<CreateRequester />} />
 					<Route path="/requisitantes/:id" element={<ShowRequester />} />
 					<Route
 						path="/requisitantes/:id/atualizar"
 						element={<UpdateRequester />}
 					/>
-
-					<Route path="/setores" element={<ListSectors />} />
-					<Route path="/setores/novo" element={<CreateSector />} />
-					<Route path="/setores/:id" element={<ShowSector />} />
-					<Route path="/setores/:id/atualizar" element={<UpdateSector />} />
 
 					<Route
 						path="/requisitantes/tickets/novo"
@@ -104,6 +90,51 @@ export const PrivateRoutes = () => {
 						path="/requisitantes/tickets/:id"
 						element={<ShowTicketsByRequesterSide />}
 					/>
+				</Routes>
+			</PrivateBase>
+		);
+	}
+
+	if (typeOfUser === 'admin') {
+		return (
+			<PrivateBase>
+				<Routes>
+					<Route path="/admin/requisitantes" element={<ListRequesters />} />
+					<Route
+						path="/admin/requisitantes/novo"
+						element={<CreateRequester />}
+					/>
+					<Route path="/admin/requisitantes/:id" element={<ShowRequester />} />
+					<Route
+						path="/admin/requisitantes/:id/atualizar"
+						element={<UpdateRequester />}
+					/>
+
+					<Route path="/admin/setores" element={<ListSectors />} />
+					<Route path="/admin/setores/novo" element={<CreateSector />} />
+					<Route path="/admin/setores/:id" element={<ShowSector />} />
+					<Route
+						path="/admin/setores/:id/atualizar"
+						element={<UpdateSector />}
+					/>
+
+					<Route path="/admin/categorias" element={<ListCategories />} />
+					<Route path="/admin/categorias/nova" element={<CreateCategory />} />
+					<Route path="/admin/categorias/:id" element={<ShowCategory />} />
+					<Route
+						path="/admin/categorias/:id/atualizar"
+						element={<UpdateCategory />}
+					/>
+
+					<Route path="/admin/tickets" element={<ListTicketsByAdminSide />} />
+					<Route
+						path="/admin/tickets/:id"
+						element={<ShowTicketsByAdminSide />}
+					/>
+
+					<Route path="/admin/agentes" element={<ListAgents />} />
+
+					<Route path="/admin/agentes/novo" element={<CreateAgent />} />
 				</Routes>
 			</PrivateBase>
 		);

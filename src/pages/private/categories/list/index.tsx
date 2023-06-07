@@ -32,7 +32,7 @@ export const ListCategories = () => {
 	const { mutateAsync: deleteCategory } = useDeleteCategory();
 
 	const handleShowMoreInfo = (id: string) => {
-		history(`/app/categorias/${id}`);
+		history(`/app/admin/categorias/${id}`);
 	};
 
 	const showModal = (id: string) => {
@@ -112,7 +112,7 @@ export const ListCategories = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to="/app/categorias/nova">
+				<Link to="/app/admin/categorias/nova">
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Criar nova categoria
 					</Button>

@@ -28,7 +28,6 @@ import { translate } from '../../../helpers/translate';
 import { AxiosError } from 'axios';
 import { IRequestError } from '../../../interfaces/requestError';
 import useAppContext from '../../../hooks/app/useAppContext';
-import { clearAccessToken } from '../../../helpers/auth';
 import { useTurnAvailability } from '../../../hooks/api/agents/useTurnAvailability';
 
 import { BsFillTicketDetailedFill } from 'react-icons/bs';
@@ -54,13 +53,13 @@ function getItem(
 export const PrivateBase = ({ children }: ParentPage) => {
 	const [collapsed, setCollapsed] = useState(false);
 	const [items, setItems] = useState<MenuItem[]>([]);
-	const history = useNavigate();
+	const navigate = useNavigate();
 
 	const { mutateAsync: logoff, isLoading: isLoadingLogoff } = useLogoff();
 	const { mutateAsync: turnAvailability, isLoading: isLoadingUpdate } =
 		useTurnAvailability();
 
-	const { handleLogoff, userEmail, typeOfUser } = useAppContext();
+	const { handleLogoff, userEmail, typeOfUser, userId } = useAppContext();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -70,15 +69,13 @@ export const PrivateBase = ({ children }: ParentPage) => {
 
 	const handleOk = async () => {
 		try {
-			handleLogoff();
-
 			if (typeOfUser === 'agent') {
 				await turnAvailability({ email: userEmail || '', available: false });
 			}
 
 			await logoff();
 
-			clearAccessToken();
+			handleLogoff();
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				const errorObj: IRequestError = error?.response?.data;
@@ -109,35 +106,63 @@ export const PrivateBase = ({ children }: ParentPage) => {
 			label: string;
 		};
 
-		let path = `/app/${menuItem.label.toLocaleLowerCase()}`;
+		let path =
+			typeOfUser === 'admin'
+				? `/app/admin/${menuItem.label.toLocaleLowerCase()}`
+				: `/app/${menuItem.label.toLocaleLowerCase()}`;
 
-		if (menuItem.label === 'Tickets') {
-			if (typeOfUser === 'agent') {
-				path = '/app/agentes/tickets';
-			}
+		switch (menuItem.label) {
+			case 'Tickets': {
+				if (typeOfUser === 'agent') {
+					path = '/app/agentes/tickets';
+				}
 
-			if (typeOfUser === 'requester') {
-				path = '/app/requisitantes/tickets';
+				if (typeOfUser === 'requester') {
+					path = '/app/requisitantes/tickets';
+				}
+
+				break;
 			}
+			case 'Minha Conta': {
+				if (typeOfUser === 'agent') {
+					path = `/app/agentes/${userId}`;
+				}
+
+				if (typeOfUser === 'requester') {
+					path = `/app/requisitantes/${userId}`;
+				}
+
+				break;
+			}
+			default:
+				break;
 		}
 
-		history(path);
+		navigate(path);
 	};
 
 	useEffect(() => {
 		if (typeOfUser === 'agent') {
 			setItems(() => [
-				getItem('Agentes', '1', <UserOutlined />),
-				getItem('Categorias', '2', <ToolOutlined />),
+				getItem('Minha Conta', '1', <UserOutlined />),
 				getItem('Tickets', '3', <BsFillTicketDetailedFill />),
 			]);
 		}
 
 		if (typeOfUser === 'requester') {
 			setItems(() => [
-				getItem('Requisitantes', '1', <UserOutlined />),
-				getItem('Setores', '2', <DesktopOutlined />),
-				getItem('Tickets', '3', <BsFillTicketDetailedFill />),
+				getItem('Minha Conta', '1', <UserOutlined />),
+				getItem('Tickets', '2', <BsFillTicketDetailedFill />),
+			]);
+		}
+
+		if (typeOfUser === 'admin') {
+			setItems(() => [
+				getItem('Agentes', '1', <UserOutlined />),
+				getItem('Requisitantes', '2', <UserOutlined />),
+				getItem('Categorias', '3', <ToolOutlined />),
+				getItem('Setores', '4', <DesktopOutlined />),
+				getItem('Tickets', '5', <BsFillTicketDetailedFill />),
 			]);
 		}
 	}, [typeOfUser]);
@@ -154,9 +179,46 @@ export const PrivateBase = ({ children }: ParentPage) => {
 						style={{
 							height: 32,
 							margin: 16,
+							borderRadius: '5px',
 							background: 'rgba(255, 255, 255, 0.2)',
 						}}
-					/>
+					>
+						{typeOfUser === 'admin' && (
+							<Typography
+								style={{
+									color: 'white',
+									marginLeft: '2.5rem',
+									paddingTop: '5px',
+								}}
+							>
+								Administrador
+							</Typography>
+						)}
+
+						{typeOfUser === 'agent' && (
+							<Typography
+								style={{
+									color: 'white',
+									marginLeft: '3.8rem',
+									paddingTop: '5px',
+								}}
+							>
+								Agente
+							</Typography>
+						)}
+
+						{typeOfUser === 'requester' && (
+							<Typography
+								style={{
+									color: 'white',
+									marginLeft: '2.9rem',
+									paddingTop: '5px',
+								}}
+							>
+								Requisitante
+							</Typography>
+						)}
+					</div>
 					<Menu
 						theme="dark"
 						defaultSelectedKeys={['1']}
@@ -181,7 +243,7 @@ export const PrivateBase = ({ children }: ParentPage) => {
 							<Button
 								type="ghost"
 								style={{
-									fontSize: '18px',
+									fontSize: '15px',
 									marginRight: '10px',
 								}}
 								onClick={showModal}

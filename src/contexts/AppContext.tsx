@@ -1,15 +1,16 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { ParentPage } from '../interfaces/parentPage';
-import { getAccessToken } from '../helpers/auth';
+import { clearAccessToken, getAccessToken } from '../helpers/auth';
 import { TUser } from '../types/TUser';
 
 interface IAppContext {
 	isLoggedIn: boolean;
 	userEmail: string | null;
 	userId: string | null;
-	typeOfUser: TUser | string;
+	typeOfUser: TUser;
 	setLoggedIn: (isLoggedIn: boolean) => void;
 	setUserEmail: (email: string) => void;
+	clearUserData: () => void;
 }
 
 const AppContext = createContext<IAppContext>({} as IAppContext);
@@ -22,17 +23,38 @@ export const AppProvider = ({ children }: ParentPage) => {
 		return !!data;
 	});
 
-	const [typeOfUser] = useState<TUser | string>(() => {
+	const [typeOfUser, setTypeOfUser] = useState<TUser>(() => {
 		const data = getAccessToken();
-		return data?.typeOfUser || '';
+		return data?.typeOfUser as TUser;
 	});
 
-	const [userId] = useState<TUser | string>(() => {
+	const [userId, setUserId] = useState<TUser | string>(() => {
 		const data = getAccessToken();
 		return data?.userId || '';
 	});
 
 	const [userEmail, setUserEmail] = useState<string | null>(null);
+
+	const clearUserData = () => {
+		clearAccessToken();
+		setTypeOfUser('' as TUser);
+		setUserId('');
+		setUserEmail(null);
+	};
+
+	useEffect(() => {
+		if (isLoggedIn) {
+			setTypeOfUser(() => {
+				const data = getAccessToken();
+				return data?.typeOfUser as TUser;
+			});
+
+			setUserId(() => {
+				const data = getAccessToken();
+				return data?.userId || '';
+			});
+		}
+	}, [isLoggedIn]);
 
 	return (
 		<AppContext.Provider
@@ -43,6 +65,7 @@ export const AppProvider = ({ children }: ParentPage) => {
 				userId,
 				setLoggedIn,
 				setUserEmail,
+				clearUserData,
 			}}
 		>
 			{children}

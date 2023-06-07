@@ -21,6 +21,7 @@ export const ShowRequester = () => {
 		requesterInfos = [
 			['Nome', requester.name],
 			['Email', requester.email],
+			['Função', 'Colaborador da Empresa / Requisitante de Suporte'],
 			['Criado em', new Date(requester.created_at).toLocaleString('pt-BR')],
 			['Atualizado em', new Date(requester.updated_at).toLocaleString('pt-BR')],
 		];
@@ -29,7 +30,7 @@ export const ShowRequester = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to={`/app/requisitantes/${requester?.id}/atualizar`}>
+				<Link to={`/app/admin/requisitantes/${requester?.id}/atualizar`}>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Atualizar dados
 					</Button>
@@ -37,8 +38,8 @@ export const ShowRequester = () => {
 			</div>
 
 			<Card>
-				<Title level={3} style={{ marginBottom: '20px' }}>
-					Informações do Requisitante
+				<Title level={4} style={{ marginBottom: '20px' }}>
+					Dados da sua conta
 				</Title>
 				<Descriptions column={1}>
 					{requesterInfos.map(([label, data], i) => (

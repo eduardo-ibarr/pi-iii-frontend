@@ -8,9 +8,12 @@ export function useListMessagesByTicket(ticketId: string) {
 	return useQuery('listMessagesByTicket', async () => {
 		const messages = await messagesService.listMessages();
 
-		const messagesFound = messages.filter(
-			(message) => message.conversation_id === conversation?.id
-		);
+		const messagesFound = messages
+			.filter((message) => message.conversation_id === conversation?.id)
+			.sort(
+				(a, b) =>
+					new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+			);
 
 		return messagesFound;
 	});

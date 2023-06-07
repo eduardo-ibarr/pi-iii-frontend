@@ -29,7 +29,7 @@ export const ListSectors = () => {
 	const { mutateAsync: deleteSector } = useDeleteSector();
 
 	const handleShowMoreInfo = (id: string) => {
-		history(`/app/setores/${id}`);
+		history(`/app/admin/setores/${id}`);
 	};
 
 	const showModal = (id: string) => {
@@ -109,7 +109,7 @@ export const ListSectors = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to="/app/setores/novo">
+				<Link to="/app/admin/setores/novo">
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Criar novo setor
 					</Button>
