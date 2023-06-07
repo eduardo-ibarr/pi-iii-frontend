@@ -28,7 +28,7 @@ export const ShowSector = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to={`/app/setores/${sector?.id}/atualizar`}>
+				<Link to={`/app/admin/setores/${sector?.id}/atualizar`}>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Atualizar dados
 					</Button>

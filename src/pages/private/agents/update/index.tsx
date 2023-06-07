@@ -57,8 +57,8 @@ export const UpdateAgent = () => {
 
 	return (
 		<Card bordered={false}>
-			<Title level={3} style={{ marginBottom: '20px' }}>
-				Atualização de Agente
+			<Title level={4} style={{ marginBottom: '20px' }}>
+				Atualização de dados
 			</Title>
 			<Form
 				layout="vertical"
@@ -87,7 +87,7 @@ export const UpdateAgent = () => {
 						},
 					]}
 					style={{ marginBottom: '30px' }}
-					label="Digite o nome do agente:"
+					label="Nome:"
 					name="name"
 				>
 					<Input />
@@ -100,7 +100,7 @@ export const UpdateAgent = () => {
 					]}
 					style={{ marginBottom: '30px' }}
 					name="email"
-					label="Digite o email do agente:"
+					label="Email:"
 				>
 					<Input />
 				</Form.Item>
@@ -114,7 +114,7 @@ export const UpdateAgent = () => {
 					]}
 					style={{ marginBottom: '30px' }}
 					name="available"
-					label="Disponibilidade atual do agente:"
+					label="Disponibilidade atual:"
 				>
 					<Switch
 						defaultChecked

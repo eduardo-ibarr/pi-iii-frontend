@@ -1,1 +1,1 @@
-export type TUser = 'requester' | 'agent';
+export type TUser = 'requester' | 'agent' | 'admin';

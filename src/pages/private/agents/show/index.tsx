@@ -22,6 +22,7 @@ export const ShowAgent = () => {
 		agentInfos = [
 			['Nome', agent.name],
 			['Email', agent.email],
+			['Função', 'Agente de Suporte'],
 			[
 				'Status',
 				agent.available ? (
@@ -50,8 +51,8 @@ export const ShowAgent = () => {
 			</div>
 
 			<Card>
-				<Title level={3} style={{ marginBottom: '20px' }}>
-					Informações do Agente
+				<Title level={4} style={{ marginBottom: '20px' }}>
+					Dados da sua conta
 				</Title>
 				<Descriptions column={1}>
 					{agentInfos.map(([label, data], i) => (

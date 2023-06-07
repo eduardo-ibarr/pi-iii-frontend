@@ -1,49 +1,66 @@
-import { Form, Radio, Input, Button, Spin, Card } from 'antd';
-import React from 'react';
+/* eslint-disable indent */
+import { Form, Input, Button, Spin, Card } from 'antd';
+import React, { useEffect } from 'react';
 import { ILogin } from '../../../interfaces/modules';
 import { useLogin } from '../../../hooks/api/auth/useLogin';
 import useAppContext from '../../../hooks/app/useAppContext';
-import { useNavigate } from 'react-router';
 import { openSuccessNotification } from '../../../components';
 import Title from 'antd/es/typography/Title';
 import { useTurnAvailability } from '../../../hooks/api/agents/useTurnAvailability';
 import { handleError } from '../../../helpers/handleError';
+import { useNavigate } from 'react-router';
 
 export const LoginPage = () => {
 	const [form] = Form.useForm<ILogin>();
 
 	const navigate = useNavigate();
 
-	const { handleLogin, handleSetUserEmail } = useAppContext();
+	const { handleLogin, handleSetUserEmail, isLoggedIn, typeOfUser, userId } =
+		useAppContext();
 
 	const { mutateAsync: turnAvailability, isLoading: isLoadingUpdate } =
 		useTurnAvailability();
 
 	const { mutateAsync: login, isLoading: isLoadingLogin } = useLogin();
 
-	const onFinish = async ({ email, password, type_of_user }: ILogin) => {
+	const onFinish = async ({ email, password }: ILogin) => {
 		try {
-			await login({ email, password, type_of_user });
+			await login({ email, password });
 			await turnAvailability({ email, available: true });
 
 			handleLogin();
 			handleSetUserEmail(email);
-
-			if (type_of_user === 'agent') {
-				navigate('/app/agentes');
-				window.location.reload();
-			}
-
-			if (type_of_user === 'requester') {
-				navigate('/app/requisitantes');
-				window.location.reload();
-			}
 
 			openSuccessNotification('Login realizado com sucesso.');
 		} catch (error) {
 			handleError(error);
 		}
 	};
+
+	useEffect(() => {
+		setTimeout(() => {
+			const redirectUser = async () => {
+				if (isLoggedIn && typeOfUser && userId) {
+					switch (typeOfUser) {
+						case 'agent':
+							navigate(`/app/agentes/${userId}`);
+							break;
+						case 'requester':
+							navigate(`/app/requisitantes/${userId}`);
+							break;
+						case 'admin':
+							navigate('/app/admin/agentes');
+							break;
+						default:
+							navigate('/404');
+							break;
+					}
+				}
+			};
+
+			redirectUser();
+		}, 1500);
+	}, [isLoggedIn, typeOfUser, userId, navigate]);
 
 	return (
 		<div
@@ -58,19 +75,6 @@ export const LoginPage = () => {
 			<Title>Realize o seu login na nossa plataforma.</Title>
 			<Card bordered={false} style={{ width: '500px' }}>
 				<Form layout="vertical" form={form} onFinish={onFinish}>
-					<Form.Item
-						rules={[
-							{ required: true, message: 'O tipo de usuário é obrigatório' },
-						]}
-						style={{ marginBottom: '30px' }}
-						label="Selecione o tipo de usuário:"
-						name="type_of_user"
-					>
-						<Radio.Group>
-							<Radio.Button value="agent">Agente de Suporte</Radio.Button>
-							<Radio.Button value="requester">Requisitante</Radio.Button>
-						</Radio.Group>
-					</Form.Item>
 					<Form.Item
 						rules={[
 							{ required: true, message: 'O email é obrigatório' },

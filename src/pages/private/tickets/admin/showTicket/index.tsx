@@ -7,7 +7,7 @@ import { LoadingSpin, ChatInterface } from '../../../../../components';
 import { translate } from '../../../../../helpers/translate';
 import { TagColorsByStatus } from '../../../../../constants/enums/TagsColorsByStatus';
 
-export const ShowTicketsByRequesterSide = () => {
+export const ShowTicketsByAdminSide = () => {
 	const { id } = useParams();
 
 	const { data: ticket, isLoading: isLoadingTicket } = useShowTicket(
@@ -62,10 +62,7 @@ export const ShowTicketsByRequesterSide = () => {
 				</Descriptions>
 			</Card>
 
-			<ChatInterface
-				disabled={ticket?.status !== 'in progress'}
-				ticketId={ticket?.id || ''}
-			/>
+			<ChatInterface disabled={true} ticketId={ticket?.id || ''} />
 		</div>
 	);
 };

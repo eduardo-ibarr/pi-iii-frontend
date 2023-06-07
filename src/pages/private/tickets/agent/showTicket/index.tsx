@@ -47,13 +47,22 @@ export const ShowTicketsByAgentSide = () => {
 			['Assunto', <b key={ticket.id}>{ticket.subject}</b>],
 			['Conteúdo', ticket.content],
 			['Categoria de suporte', ticket.category_name],
-			['Requisitante', ticket.requester_name],
+			['Nome do requisitante', ticket.requester_name],
+			['Email do requisitante', ticket.requester_email],
 			['Setor da empresa', ticket.sector_name],
 			[
 				'Status',
 				<Tag key={ticket.id} color={TagColorsByStatus[ticket.status]}>
 					{translate({ message: ticket.status, type: 'status' })}
 				</Tag>,
+			],
+			[
+				'Nome do agente responsável',
+				ticket.agent_name || <em>Não atribuído</em>,
+			],
+			[
+				'Email do agente  responsável',
+				ticket.agent_email || <em>Não atribuído</em>,
 			],
 			['Criado em', new Date(ticket.created_at).toLocaleString('pt-BR')],
 			['Atualizado em', new Date(ticket.updated_at).toLocaleString('pt-BR')],
@@ -111,16 +120,9 @@ export const ShowTicketsByAgentSide = () => {
 
 	return (
 		<div style={{ display: 'flex', width: '100%', gap: '1rem' }}>
-			{/* <div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to={`/app/agentes/${ticket?.id}/atualizar`}>
-					<Button type="primary" style={{ marginBottom: '20px' }}>
-						Atualizar dados
-					</Button>
-				</Link>
-			</div> */}
 			<Card style={{ position: 'relative' }}>
-				<Title level={3} style={{ marginBottom: '20px' }}>
-					Informações do Ticket
+				<Title level={4} style={{ marginBottom: '20px' }}>
+					Informações do ticket de atendimento
 				</Title>
 				<Descriptions column={1}>
 					{ticketInfos.map(([label, data], i) => (
@@ -171,9 +173,7 @@ export const ShowTicketsByAgentSide = () => {
 			</Card>
 
 			<ChatInterface
-				disabled={
-					ticket?.status === 'cancelled' || ticket?.status === 'finished'
-				}
+				disabled={ticket?.status !== 'in progress'}
 				ticketId={ticket?.id || ''}
 			/>
 

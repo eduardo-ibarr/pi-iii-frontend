@@ -9,6 +9,7 @@ const useAppContext = () => {
 		setUserEmail,
 		userEmail,
 		userId,
+		clearUserData,
 	} = useContext(AppContext);
 
 	const handleLogin = () => {
@@ -20,6 +21,7 @@ const useAppContext = () => {
 	};
 
 	const handleLogoff = () => {
+		clearUserData();
 		setLoggedIn(false);
 	};
 

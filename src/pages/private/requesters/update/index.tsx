@@ -58,8 +58,8 @@ export const UpdateRequester = () => {
 
 	return (
 		<Card bordered={false}>
-			<Title level={3} style={{ marginBottom: '20px' }}>
-				Atualização de Requisitante
+			<Title level={4} style={{ marginBottom: '20px' }}>
+				Atualização de dados
 			</Title>
 			<Form
 				layout="vertical"
@@ -87,7 +87,7 @@ export const UpdateRequester = () => {
 						},
 					]}
 					style={{ marginBottom: '30px' }}
-					label="Digite o nome do requisitante:"
+					label="Nome:"
 					name="name"
 				>
 					<Input />
@@ -103,7 +103,7 @@ export const UpdateRequester = () => {
 					]}
 					style={{ marginBottom: '30px' }}
 					name="email"
-					label="Digite o email do requisitante:"
+					label="Email:"
 				>
 					<Input />
 				</Form.Item>
