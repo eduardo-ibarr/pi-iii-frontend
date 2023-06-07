@@ -9,7 +9,7 @@ import {
 	ChatInterface,
 } from '../../../../../components';
 import { translate } from '../../../../../helpers/translate';
-import { TagColorsByStatus } from '../../../../../constants/enums/TagsColorsByStatus';
+import { tagColorsByStatus } from '../../../../../constants/tagsColorsByStatus';
 import { useUpdateTicket } from '../../../../../hooks/api/tickets/useUpdateTicket';
 import { handleError } from '../../../../../helpers';
 import useAppContext from '../../../../../hooks/app/useAppContext';
@@ -52,7 +52,7 @@ export const ShowTicketsByAgentSide = () => {
 			['Setor da empresa', ticket.sector_name],
 			[
 				'Status',
-				<Tag key={ticket.id} color={TagColorsByStatus[ticket.status]}>
+				<Tag key={ticket.id} color={tagColorsByStatus[ticket.status]}>
 					{translate({ message: ticket.status, type: 'status' })}
 				</Tag>,
 			],
