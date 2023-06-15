@@ -30,7 +30,7 @@ export const ShowRequester = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to={`/app/admin/requisitantes/${requester?.id}/atualizar`}>
+				<Link to={`/app/requisitantes/${requester?.id}/atualizar`}>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Atualizar dados
 					</Button>
