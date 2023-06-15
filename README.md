@@ -1,4 +1,4 @@
-# Projeto Integrador II
+# PI III Frontend
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/eduardo-ibarr/pi-iii-frontend?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/eduardo-ibarr/pi-iii-frontend?style=for-the-badge)
