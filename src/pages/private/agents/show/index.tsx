@@ -6,9 +6,11 @@ import { useParams } from 'react-router';
 import { LoadingSpin } from '../../../../components/LoadingSpin';
 import { Link } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
+import useAppContext from '../../../../hooks/app/useAppContext';
 
 export const ShowAgent = () => {
 	const { id } = useParams();
+	const { typeOfUser } = useAppContext();
 
 	const { data: agent, isLoading } = useShowAgent(id as string);
 
@@ -43,7 +45,13 @@ export const ShowAgent = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to={`/app/agentes/${agent?.id}/atualizar`}>
+				<Link
+					to={
+						typeOfUser === 'admin'
+							? `/app/admin/agentes/${agent?.id}/atualizar`
+							: `/app/agentes/${agent?.id}/atualizar`
+					}
+				>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Atualizar dados
 					</Button>
