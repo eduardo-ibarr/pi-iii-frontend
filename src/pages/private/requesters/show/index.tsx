@@ -5,9 +5,11 @@ import { LoadingSpin } from '../../../../components/LoadingSpin';
 import { Link } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import { useShowRequester } from '../../../../hooks/api/requesters';
+import useAppContext from '../../../../hooks/app/useAppContext';
 
 export const ShowRequester = () => {
 	const { id } = useParams();
+	const { typeOfUser } = useAppContext();
 
 	const { data: requester, isLoading } = useShowRequester(id as string);
 
@@ -30,7 +32,13 @@ export const ShowRequester = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to={`/app/requisitantes/${requester?.id}/atualizar`}>
+				<Link
+					to={
+						typeOfUser === 'admin'
+							? `/app/admin/requisitantes/${requester?.id}/atualizar`
+							: `/app/requisitantes/${requester?.id}/atualizar`
+					}
+				>
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Atualizar dados
 					</Button>

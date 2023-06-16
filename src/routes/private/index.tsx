@@ -132,8 +132,12 @@ export const PrivateRoutes = () => {
 						element={<ShowTicketsByAdminSide />}
 					/>
 
+					<Route path="/admin/agentes/:id" element={<ShowAgent />} />
+					<Route
+						path="/admin/agentes/:id/atualizar"
+						element={<UpdateAgent />}
+					/>
 					<Route path="/admin/agentes" element={<ListAgents />} />
-
 					<Route path="/admin/agentes/novo" element={<CreateAgent />} />
 				</Routes>
 			</PrivateBase>
