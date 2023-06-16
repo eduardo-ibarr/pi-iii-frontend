@@ -35,7 +35,7 @@ export const ListAgents = () => {
 	const { mutateAsync: deleteAgent } = useDeleteAgent();
 
 	const handleShowMoreInfo = (id: string) => {
-		history(`/app/agentes/${id}`);
+		history(`/app/admin/agentes/${id}`);
 	};
 
 	const showModal = (id: string) => {
@@ -150,7 +150,7 @@ export const ListAgents = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'right', marginRight: '10px' }}>
-				<Link to="/app/agentes/novo">
+				<Link to="/app/admin/agentes/novo">
 					<Button type="primary" style={{ marginBottom: '20px' }}>
 						Criar novo agente
 					</Button>
