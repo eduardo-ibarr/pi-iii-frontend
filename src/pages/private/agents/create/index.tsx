@@ -1,4 +1,4 @@
-import { Card, Input, Button, Form, Spin, Switch } from 'antd';
+import { Card, Input, Button, Form, Spin } from 'antd';
 import React from 'react';
 import { ICreateAgent } from '../../../../interfaces/create';
 import { useCreateAgent } from '../../../../hooks/api/agents';
@@ -15,14 +15,9 @@ export const CreateAgent = () => {
 
 	const { mutateAsync: createAgent, isLoading } = useCreateAgent();
 
-	const onFinish = async ({
-		available,
-		email,
-		name,
-		password,
-	}: ICreateAgent) => {
+	const onFinish = async ({ email, name, password }: ICreateAgent) => {
 		try {
-			await createAgent({ available, email, name, password });
+			await createAgent({ available: true, email, name, password });
 			openSuccessNotification('Agente cadastrado com sucesso.');
 		} catch (error) {
 			handleError(error);
@@ -39,9 +34,6 @@ export const CreateAgent = () => {
 				form={form}
 				onFinish={onFinish}
 				style={{ width: '500px' }}
-				initialValues={{
-					available: true,
-				}}
 			>
 				<Form.Item
 					rules={[
@@ -74,23 +66,6 @@ export const CreateAgent = () => {
 					label="Digite o email do agente:"
 				>
 					<Input />
-				</Form.Item>
-				<Form.Item
-					style={{ marginBottom: '30px' }}
-					rules={[
-						{
-							required: true,
-							message: 'A disponibilidade do agente é obrigatória',
-						},
-					]}
-					name="available"
-					label="Disponibilidade atual do agente:"
-				>
-					<Switch
-						checkedChildren="Online"
-						defaultChecked
-						unCheckedChildren="Offline"
-					/>
 				</Form.Item>
 				<Form.Item
 					rules={[
