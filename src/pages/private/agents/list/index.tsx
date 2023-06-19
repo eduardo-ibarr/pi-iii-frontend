@@ -1,6 +1,8 @@
-import { Button, Modal, Table, Tag, Tooltip } from 'antd';
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
+import { Button, Input, Modal, Select, Table, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
 	SearchOutlined,
 	DeleteOutlined,
@@ -25,6 +27,18 @@ interface DataType {
 	moreInfo: string;
 }
 
+const filterOptions = [
+	{ value: 'name', label: 'Nome' },
+	{ value: 'email', label: 'Email' },
+];
+
+type TFilterOptions = 'email' | 'name';
+
+type TFilterData = {
+	type: TFilterOptions;
+	value: string;
+};
+
 export const ListAgents = () => {
 	const history = useNavigate();
 
@@ -34,6 +48,11 @@ export const ListAgents = () => {
 	const { data: agents, isLoading: isLoadingList } = useListAgents();
 	const { mutateAsync: deleteAgent } = useDeleteAgent();
 
+	const [filterData, setFilterData] = useState<TFilterData>({
+		type: 'name',
+		value: '',
+	});
+
 	const handleShowMoreInfo = (id: string) => {
 		history(`/app/admin/agentes/${id}`);
 	};
@@ -42,6 +61,27 @@ export const ListAgents = () => {
 		setIdAgentToDelete(id);
 		setIsModalOpen(true);
 	};
+
+	const agentsFiltered = useMemo(() => {
+		if (filterData.value.length > 0 && agents) {
+			const filterFunctions = {
+				name: () => {
+					return agents.filter((agent) =>
+						agent.name.toLowerCase().includes(filterData.value.toLowerCase())
+					);
+				},
+				email: () => {
+					return agents.filter((agent) =>
+						agent.email.toLowerCase().includes(filterData.value.toLowerCase())
+					);
+				},
+			};
+
+			return filterFunctions[filterData.type]();
+		}
+
+		return [];
+	}, [filterData]);
 
 	const columns: ColumnsType<DataType> = [
 		{
@@ -120,14 +160,26 @@ export const ListAgents = () => {
 		);
 	}
 
-	const data: DataType[] = (agents as IAgent[]).map((agent, i) => ({
-		key: i,
-		name: agent.name,
-		email: agent.email,
-		status: agent.available,
-		createdAt: new Date(agent.created_at).toLocaleString('pt-BR'),
-		moreInfo: agent.id,
-	}));
+	const data: DataType[] =
+		agentsFiltered.length > 0
+			? agentsFiltered.map((agent, i) => ({
+					key: i,
+					name: agent.name,
+					email: agent.email,
+					status: agent.available,
+					createdAt: new Date(agent.created_at).toLocaleString('pt-BR'),
+					moreInfo: agent.id,
+			  }))
+			: filterData.value && agentsFiltered.length === 0
+			? []
+			: (agents as IAgent[]).map((agent, i) => ({
+					key: i,
+					name: agent.name,
+					email: agent.email,
+					status: agent.available,
+					createdAt: new Date(agent.created_at).toLocaleString('pt-BR'),
+					moreInfo: agent.id,
+			  }));
 
 	const dataSorted = sortByName(data);
 
@@ -147,13 +199,54 @@ export const ListAgents = () => {
 		setIsModalOpen(false);
 	};
 
+	const handleChangeFilterType = (type: TFilterOptions) => {
+		setFilterData((previous) => ({ ...previous, value: '', type }));
+	};
+
+	const handleChangeFilterValue = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setFilterData((previous) => ({ ...previous, value: event.target.value }));
+	};
+
 	return (
 		<>
-			<div style={{ textAlign: 'right', marginRight: '10px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					marginRight: '10px',
+					marginBottom: '20px',
+				}}
+			>
+				<div
+					style={{
+						display: 'flex',
+						gap: '15px',
+						alignItems: 'center',
+						marginLeft: '5px',
+					}}
+				>
+					<Typography>Buscar por</Typography>
+
+					<Select
+						defaultValue="name"
+						onChange={handleChangeFilterType}
+						style={{ width: '100px' }}
+						options={filterOptions}
+					/>
+
+					<Input
+						onChange={handleChangeFilterValue}
+						style={{ width: '300px', height: '32px' }}
+						placeholder={`Digite aqui o ${
+							filterData.type === 'email' ? 'email' : 'nome'
+						} para a busca...`}
+					/>
+				</div>
+
 				<Link to="/app/admin/agentes/novo">
-					<Button type="primary" style={{ marginBottom: '20px' }}>
-						Criar novo agente
-					</Button>
+					<Button type="primary">Criar novo agente</Button>
 				</Link>
 			</div>
 

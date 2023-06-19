@@ -22,7 +22,7 @@ export const CreateCategory = () => {
 
 	return (
 		<Card bordered={false}>
-			<Title level={3} style={{ marginBottom: '20px' }}>
+			<Title level={4} style={{ marginBottom: '20px' }}>
 				Cadastro de Categoria
 			</Title>
 			<Form

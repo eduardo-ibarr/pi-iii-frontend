@@ -22,7 +22,7 @@ export const CreateSector = () => {
 
 	return (
 		<Card bordered={false}>
-			<Title level={3} style={{ marginBottom: '20px' }}>
+			<Title level={4} style={{ marginBottom: '20px' }}>
 				Cadastro de Setor
 			</Title>
 			<Form

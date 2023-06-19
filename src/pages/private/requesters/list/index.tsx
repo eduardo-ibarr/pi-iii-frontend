@@ -1,6 +1,8 @@
-import { Button, Modal, Table, Tooltip } from 'antd';
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
+import { Button, Input, Modal, Select, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 import { IRequester } from '../../../../interfaces/modules';
 import { useNavigate } from 'react-router';
@@ -23,14 +25,55 @@ interface DataType {
 	moreInfo: string;
 }
 
+const filterOptions = [
+	{ value: 'name', label: 'Nome' },
+	{ value: 'email', label: 'Email' },
+];
+
+type TFilterOptions = 'email' | 'name';
+
+type TFilterData = {
+	type: TFilterOptions;
+	value: string;
+};
+
 export const ListRequesters = () => {
 	const history = useNavigate();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [idRequesterToDelete, setIdRequesterToDelete] = useState('');
+	const [filterData, setFilterData] = useState<TFilterData>({
+		type: 'name',
+		value: '',
+	});
 
 	const { data: requesters, isLoading: isLoadingList } = useListRequesters();
 	const { mutateAsync: deleteRequester } = useDeleteRequester();
+
+	const requestersFiltered = useMemo(() => {
+		if (filterData.value.length > 0 && requesters) {
+			const filterFunctions = {
+				name: () => {
+					return requesters.filter((requester) =>
+						requester.name
+							.toLowerCase()
+							.includes(filterData.value.toLowerCase())
+					);
+				},
+				email: () => {
+					return requesters.filter((requester) =>
+						requester.email
+							.toLowerCase()
+							.includes(filterData.value.toLowerCase())
+					);
+				},
+			};
+
+			return filterFunctions[filterData.type]();
+		}
+
+		return [];
+	}, [filterData]);
 
 	const handleShowMoreInfo = (id: string) => {
 		history(`/app/admin/requisitantes/${id}`);
@@ -89,13 +132,24 @@ export const ListRequesters = () => {
 		return <LoadingSpin />;
 	}
 
-	const data: DataType[] = (requesters as IRequester[]).map((requester, i) => ({
-		key: i,
-		name: requester.name,
-		email: requester.email,
-		createdAt: new Date(requester.created_at).toLocaleString('pt-BR'),
-		moreInfo: requester.id,
-	}));
+	const data: DataType[] =
+		requestersFiltered.length > 0
+			? requestersFiltered.map((requester, i) => ({
+					key: i,
+					name: requester.name,
+					email: requester.email,
+					createdAt: new Date(requester.created_at).toLocaleString('pt-BR'),
+					moreInfo: requester.id,
+			  }))
+			: filterData.value && requestersFiltered.length === 0
+			? []
+			: (requesters as IRequester[]).map((requester, i) => ({
+					key: i,
+					name: requester.name,
+					email: requester.email,
+					createdAt: new Date(requester.created_at).toLocaleString('pt-BR'),
+					moreInfo: requester.id,
+			  }));
 
 	const dataSorted = sortByName(data);
 
@@ -115,13 +169,54 @@ export const ListRequesters = () => {
 		setIsModalOpen(false);
 	};
 
+	const handleChangeFilterType = (type: TFilterOptions) => {
+		setFilterData(() => ({ value: '', type }));
+	};
+
+	const handleChangeFilterValue = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setFilterData((previous) => ({ ...previous, value: event.target.value }));
+	};
+
 	return (
 		<>
-			<div style={{ textAlign: 'right', marginRight: '10px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					marginRight: '10px',
+					marginBottom: '20px',
+				}}
+			>
+				<div
+					style={{
+						display: 'flex',
+						gap: '15px',
+						alignItems: 'center',
+						marginLeft: '5px',
+					}}
+				>
+					<Typography>Buscar por</Typography>
+
+					<Select
+						defaultValue="name"
+						onChange={handleChangeFilterType}
+						style={{ width: '100px' }}
+						options={filterOptions}
+					/>
+
+					<Input
+						onChange={handleChangeFilterValue}
+						style={{ width: '300px', height: '32px' }}
+						placeholder={`Digite aqui o ${
+							filterData.type === 'email' ? 'email' : 'nome'
+						} para a busca...`}
+					/>
+				</div>
+
 				<Link to="/app/admin/requisitantes/novo">
-					<Button type="primary" style={{ marginBottom: '20px' }}>
-						Criar novo requisitante
-					</Button>
+					<Button type="primary">Criar novo requisitante</Button>
 				</Link>
 			</div>
 

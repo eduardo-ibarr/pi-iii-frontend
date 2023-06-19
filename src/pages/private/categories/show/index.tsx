@@ -36,8 +36,8 @@ export const ShowCategory = () => {
 			</div>
 
 			<Card>
-				<Title level={3} style={{ marginBottom: '20px' }}>
-					Informações da Categoria
+				<Title level={4} style={{ marginBottom: '20px' }}>
+					Informações sobre a Categoria
 				</Title>
 				<Descriptions column={1}>
 					{categoryInfos.map(([label, data], i) => (
