@@ -43,7 +43,7 @@ export const ListSectors = () => {
 			dataIndex: 'name',
 		},
 		{
-			title: 'Criada em',
+			title: 'Criado em',
 			dataIndex: 'createdAt',
 		},
 		{
