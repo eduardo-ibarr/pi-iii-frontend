@@ -56,7 +56,6 @@ export const PrivateRoutes = () => {
 			<PrivateBase>
 				<Routes>
 					<Route path="/agentes/:id" element={<ShowAgent />} />
-					<Route path="/agentes/:id/atualizar" element={<UpdateAgent />} />
 
 					<Route path="/agentes/tickets" element={<ListTicketsByAgentSide />} />
 					<Route
@@ -73,10 +72,6 @@ export const PrivateRoutes = () => {
 			<PrivateBase>
 				<Routes>
 					<Route path="/requisitantes/:id" element={<ShowRequester />} />
-					<Route
-						path="/requisitantes/:id/atualizar"
-						element={<UpdateRequester />}
-					/>
 
 					<Route
 						path="/requisitantes/tickets/novo"
