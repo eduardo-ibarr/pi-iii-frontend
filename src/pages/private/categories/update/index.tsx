@@ -37,8 +37,8 @@ export const UpdateCategory = () => {
 
 	return (
 		<Card bordered={false}>
-			<Title level={3} style={{ marginBottom: '20px' }}>
-				Atualização de Categoria
+			<Title level={4} style={{ marginBottom: '20px' }}>
+				Atualização de dados
 			</Title>
 			<Form
 				layout="vertical"

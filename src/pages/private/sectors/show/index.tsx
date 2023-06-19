@@ -36,8 +36,8 @@ export const ShowSector = () => {
 			</div>
 
 			<Card>
-				<Title level={3} style={{ marginBottom: '20px' }}>
-					Informações do Setor
+				<Title level={4} style={{ marginBottom: '20px' }}>
+					Informações sobre o Setor
 				</Title>
 				<Descriptions column={1}>
 					{sectorInfos.map(([label, data], i) => (

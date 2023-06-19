@@ -34,8 +34,8 @@ export const UpdateSector = () => {
 
 	return (
 		<Card bordered={false}>
-			<Title level={3} style={{ marginBottom: '20px' }}>
-				Atualização de Setor
+			<Title level={4} style={{ marginBottom: '20px' }}>
+				Atualização de dados
 			</Title>
 			<Form
 				layout="vertical"
