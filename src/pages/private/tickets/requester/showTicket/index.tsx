@@ -51,7 +51,7 @@ export const ShowTicketsByRequesterSide = () => {
 		<div style={{ display: 'flex', width: '100%', gap: '1rem' }}>
 			<Card>
 				<Title level={4} style={{ marginBottom: '20px' }}>
-					Informações do ticket de atendimento
+					Informações do Ticket de Atendimento
 				</Title>
 				<Descriptions column={1}>
 					{ticketInfos.map(([label, data], i) => (

@@ -1,6 +1,8 @@
-import { Button, Modal, Table, Tooltip } from 'antd';
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
+import { Button, Input, Modal, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ISector } from '../../../../interfaces/modules';
 import { useNavigate } from 'react-router';
@@ -28,6 +30,39 @@ export const ListSectors = () => {
 	const { data: sectors, isLoading: isLoadingList } = useListSectors();
 	const { mutateAsync: deleteSector } = useDeleteSector();
 
+	const [filterValue, setFilterValue] = useState('');
+
+	const sectorsFiltered = useMemo(() => {
+		if (filterValue.length > 0 && sectors) {
+			return sectors.filter((sector) =>
+				sector.name.toLowerCase().includes(filterValue.toLowerCase())
+			);
+		}
+
+		return [];
+	}, [filterValue]);
+
+	if (isLoadingList) {
+		return <LoadingSpin />;
+	}
+
+	const data: DataType[] =
+		sectorsFiltered.length > 0
+			? sectorsFiltered.map((sector, i) => ({
+					key: i,
+					name: sector.name,
+					createdAt: new Date(sector.created_at).toLocaleString('pt-BR'),
+					moreInfo: sector.id,
+			  }))
+			: filterValue && sectorsFiltered.length === 0
+			? []
+			: (sectors as ISector[]).map((sector, i) => ({
+					key: i,
+					name: sector.name,
+					createdAt: new Date(sector.created_at).toLocaleString('pt-BR'),
+					moreInfo: sector.id,
+			  }));
+
 	const handleShowMoreInfo = (id: string) => {
 		history(`/app/admin/setores/${id}`);
 	};
@@ -43,7 +78,7 @@ export const ListSectors = () => {
 			dataIndex: 'name',
 		},
 		{
-			title: 'Criada em',
+			title: 'Criado em',
 			dataIndex: 'createdAt',
 		},
 		{
@@ -77,17 +112,6 @@ export const ListSectors = () => {
 		},
 	];
 
-	if (isLoadingList) {
-		return <LoadingSpin />;
-	}
-
-	const data: DataType[] = (sectors as ISector[]).map((sector, i) => ({
-		key: i,
-		name: sector.name,
-		createdAt: new Date(sector.created_at).toLocaleString('pt-BR'),
-		moreInfo: sector.id,
-	}));
-
 	const dataSorted = sortByName(data);
 
 	const handleOk = async () => {
@@ -106,13 +130,39 @@ export const ListSectors = () => {
 		setIsModalOpen(false);
 	};
 
+	const handleChangeFilterValue = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setFilterValue(event.target.value);
+	};
+
 	return (
 		<>
-			<div style={{ textAlign: 'right', marginRight: '10px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					marginRight: '10px',
+					marginBottom: '20px',
+				}}
+			>
+				<div
+					style={{
+						display: 'flex',
+						gap: '15px',
+						alignItems: 'center',
+						marginLeft: '5px',
+					}}
+				>
+					<Input
+						onChange={handleChangeFilterValue}
+						style={{ width: '300px', height: '32px' }}
+						placeholder="Buscar por nome..."
+					/>
+				</div>
+
 				<Link to="/app/admin/setores/novo">
-					<Button type="primary" style={{ marginBottom: '20px' }}>
-						Criar novo setor
-					</Button>
+					<Button type="primary">Criar novo setor</Button>
 				</Link>
 			</div>
 

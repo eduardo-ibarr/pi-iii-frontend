@@ -1,6 +1,8 @@
-import { Button, Modal, Table, Tooltip } from 'antd';
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
+import { Button, Input, Modal, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ICategory } from '../../../../interfaces/modules';
 import { useNavigate } from 'react-router';
@@ -30,6 +32,18 @@ export const ListCategories = () => {
 
 	const { data: categories, isLoading: isLoadingList } = useListCategories();
 	const { mutateAsync: deleteCategory } = useDeleteCategory();
+
+	const [filterValue, setFilterValue] = useState('');
+
+	const categoriesFiltered = useMemo(() => {
+		if (filterValue.length > 0 && categories) {
+			return categories.filter((category) =>
+				category.name.toLowerCase().includes(filterValue.toLowerCase())
+			);
+		}
+
+		return [];
+	}, [filterValue]);
 
 	const handleShowMoreInfo = (id: string) => {
 		history(`/app/admin/categorias/${id}`);
@@ -84,12 +98,22 @@ export const ListCategories = () => {
 		return <LoadingSpin />;
 	}
 
-	const data: DataType[] = (categories as ICategory[]).map((category, i) => ({
-		key: i,
-		name: category.name,
-		createdAt: new Date(category.created_at).toLocaleString('pt-BR'),
-		moreInfo: category.id,
-	}));
+	const data: DataType[] =
+		categoriesFiltered.length > 0
+			? categoriesFiltered.map((category, i) => ({
+					key: i,
+					name: category.name,
+					createdAt: new Date(category.created_at).toLocaleString('pt-BR'),
+					moreInfo: category.id,
+			  }))
+			: filterValue && categoriesFiltered.length === 0
+			? []
+			: (categories as ICategory[]).map((category, i) => ({
+					key: i,
+					name: category.name,
+					createdAt: new Date(category.created_at).toLocaleString('pt-BR'),
+					moreInfo: category.id,
+			  }));
 
 	const dataSorted = sortByName(data);
 
@@ -109,13 +133,39 @@ export const ListCategories = () => {
 		setIsModalOpen(false);
 	};
 
+	const handleChangeFilterValue = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setFilterValue(event.target.value);
+	};
+
 	return (
 		<>
-			<div style={{ textAlign: 'right', marginRight: '10px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					marginRight: '10px',
+					marginBottom: '20px',
+				}}
+			>
+				<div
+					style={{
+						display: 'flex',
+						gap: '15px',
+						alignItems: 'center',
+						marginLeft: '5px',
+					}}
+				>
+					<Input
+						onChange={handleChangeFilterValue}
+						style={{ width: '300px', height: '32px' }}
+						placeholder="Buscar por nome..."
+					/>
+				</div>
+
 				<Link to="/app/admin/categorias/nova">
-					<Button type="primary" style={{ marginBottom: '20px' }}>
-						Criar nova categoria
-					</Button>
+					<Button type="primary">Criar nova categoria</Button>
 				</Link>
 			</div>
 
