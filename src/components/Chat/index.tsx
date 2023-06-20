@@ -51,7 +51,6 @@ export const ChatInterface = ({ ticketId, disabled }: IChatInterfaceProps) => {
 				conversation_id: conversation?.id || '',
 				read_status: false,
 				sender: typeOfUser,
-				ticket_id: ticketId,
 			});
 		} catch (error) {
 			handleError(error);
