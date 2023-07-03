@@ -1,8 +1,6 @@
 import { TUser } from '../../types/TUser';
-
 export interface IMessage {
 	id: string;
-	ticket_id: string;
 	conversation_id: string;
 	sender: TUser;
 	content: string;
