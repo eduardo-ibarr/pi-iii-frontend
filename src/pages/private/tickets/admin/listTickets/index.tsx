@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
 import { Button, Input, Select, Tag, Tooltip, Typography } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { LoadingSpin } from '../../../../../components';
 import { translate } from '../../../../../helpers/';
 import { useNavigate } from 'react-router';
@@ -42,7 +42,7 @@ export default function ListTicketsByAdminSide() {
 
 	const { data: tickets, isLoading } = useListTickets();
 
-	const ticketsFiltered = useMemo(() => {
+	const ticketsFiltered = () => {
 		if (filterData.value.length > 0 && tickets) {
 			const filterFunctions = {
 				subject: () => {
@@ -65,7 +65,7 @@ export default function ListTicketsByAdminSide() {
 		}
 
 		return [];
-	}, [filterData]);
+	};
 
 	if (isLoading) {
 		return <LoadingSpin />;
@@ -81,8 +81,8 @@ export default function ListTicketsByAdminSide() {
 	}
 
 	const data: DataType[] =
-		ticketsFiltered.length > 0
-			? ticketsFiltered.map((ticket, i) => ({
+		ticketsFiltered().length > 0
+			? ticketsFiltered().map((ticket, i) => ({
 					status: ticket.status,
 					subject: ticket.subject,
 					requester: ticket.requester_name,
@@ -90,7 +90,7 @@ export default function ListTicketsByAdminSide() {
 					moreInfo: ticket.id,
 					key: i,
 			  }))
-			: filterData.value && ticketsFiltered.length === 0
+			: filterData.value && ticketsFiltered().length === 0
 			? []
 			: tickets.map((ticket, i) => ({
 					status: ticket.status,
